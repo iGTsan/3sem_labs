@@ -1,6 +1,8 @@
 #include <iostream>
-#include "vector.h"
+// #include "vector.h"
 #include "matrix.h"
+#include "input.h"
+#include <limits>
 
 using namespace std;
 
@@ -31,18 +33,29 @@ int main() {
 	matrix a;
 	int col, row = 1, val;
 	do {
+		cout << row << " Row" << endl;
 		do {
-			cout << row << " Row" << endl;
-			col = -1;
-			val = -1;
 			cout << "Enter column (-2 for next, -1 for exit):";
-			cin >> col;
+			try {
+				col = get_int();
+				if (col >= 0) {
+					cout << "Enter value:";
+					val = get_int();
+				}
+			}
+			catch (const char *s) {
+				cerr << s << endl;
+				col = 0;
+				if (cin.eof())
+					col = -1
+;				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				continue;
+			}
 			if (col == -2) {
 				a.add_empty(row + 1);
 			}
 			else if (col != -1) {
-				cout << "Enter value:";
-				cin >> val;
 				a.add_elem(row, col, val);
 			}
 		} while (col != -1 && col != -2);

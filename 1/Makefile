@@ -1,4 +1,4 @@
-SRC=main.cpp vector.cpp matrix.cpp
+SRC=main.cpp vector.cpp matrix.cpp input.cpp
 OBJ=$(SRC:.cpp=.o)
 FLAG1=-c -Wall -g
 FLAG2=-lstdc++

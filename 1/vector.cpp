@@ -29,7 +29,7 @@ void vector:: print() {
 		cout << data[i] << ' ';
 	cout << endl;
 }
-int vector:: operator [](int i) {
+int& vector:: operator [](int i) {
 	if (i < 0) 
 		return data[len + i];
 	return data[i];

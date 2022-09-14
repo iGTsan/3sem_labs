@@ -8,7 +8,8 @@ public:
 	void push(int n, int pos=-1);
 	~vector();
 	void print();
-	int operator [](int i);
+	// int operator [](int i);
+	int& operator [](int i);
 	int size();
 
 private:
