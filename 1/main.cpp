@@ -37,7 +37,7 @@ int main() {
 		do {
 			cout << "Enter column (-2 for next, -1 for exit):";
 			try {
-				col = get_int();
+				col = get_int(-2);
 				if (col >= 0) {
 					cout << "Enter value:";
 					val = get_int();
@@ -47,7 +47,7 @@ int main() {
 				cerr << s << endl;
 				col = 0;
 				if (cin.eof())
-					col = -1
+					col = -1;
 ;				cin.clear();
 				cin.ignore(numeric_limits<streamsize>::max(), '\n');
 				continue;
