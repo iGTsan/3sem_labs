@@ -1,28 +1,28 @@
 #include <iostream>
 #include "../lib/cartesian.h"
 #include "input.h"
+#include <limits>
 
 using namespace std;
 
-/*
-Cartesian ();
-Cartesian (double);
-Cartesian (const Cartesian&);
-double get ();
-double set (double _n);
-double chord ();
-double dist (double);
-double r_vertex();
-double r_point(double, double);
-double square();
-double max_len();
-double dist_to_max();
-*/
-
-
 void set_n(Cartesian &a) {
 	cout << "Новый коэффицент: ";
-	double n = get_double();
+	double n;
+	int good = 0;
+	while (!good){
+		try {
+			n = get_double();
+			good = 1;
+		}
+		catch (const char *s){
+			good = 0;
+			cout << s << endl;
+	 		if (cin.eof())
+	 			return;
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		}
+	}
 	a.set(n);
 }
 
@@ -34,22 +34,23 @@ void sq_side(Cartesian &a) {
 	cout << a.chord() << endl;
 }
 
-/*
-double x;
-	cout << "Угол:";
-	x = get_int();
-	cout << "Расстояние до центра в полярной системе координат в зависимости от угла = " << a.dist(x) << endl;
-	cout << "Радиус кривизны в вершине листа = " << a.r_vertex() << endl;
-	cout << "Радиус кривизны в узловой точке = " << a.r_point() << endl;
-	cout << "Площадь петли листа = " << a.square() << endl;
-	cout << "Длина наибольшего поперечника петли = " << a.max_len() << endl;
-	cout << "Расстояния от узла до наибольшего поперечника = " << a.dist_to_max() << endl;
-	*/
-
 void dist(Cartesian &a) {
 	cout << "Угол : ";
 	double y;
-	y = get_double();
+	int good = 0;
+	while (!good){
+		try {
+			y = get_double();
+			good = 1;
+		}
+		catch (const char *s){
+			cout << s << endl;
+	 		if (cin.eof())
+	 			return;
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		}
+	}
 	cout << a.dist(y) << endl;
 }
 
@@ -96,10 +97,12 @@ void menu(Cartesian &a) {
 	 			entries_func[c - 1](a);
 	 	}
 	 	catch (const char *s) {
-	 		cout << s << endl;
-	 		c = -1;
+	 		c = -1;	 		
 	 		if (cin.eof())
 	 			c = 0;
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	 		cout << s << endl;
 	 	}
 	 } while (c != 0);
 }
