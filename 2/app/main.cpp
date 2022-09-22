@@ -5,7 +5,7 @@
 
 using namespace std;
 
-void set_n(Cartesian &a) {
+void set_coef(Cartesian &a) {
 	cout << "Новый коэффицент: ";
 	double n;
 	int good = 0;
@@ -23,15 +23,15 @@ void set_n(Cartesian &a) {
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		}
 	}
-	a.set(n);
+	a.set_coef(n);
 }
 
-void get_n(Cartesian &a) {
-	cout << a.get() << endl;
+void get_coef(Cartesian &a) {
+	cout << a.get_coef() << endl;
 }
 
 void sq_side(Cartesian &a) {
-	cout << a.chord() << endl;
+	cout << a.get_chord() << endl;
 }
 
 void dist(Cartesian &a) {
@@ -51,31 +51,32 @@ void dist(Cartesian &a) {
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		}
 	}
-	cout << a.dist(y) << endl;
+	cout << a.get_dist(y) << endl;
 }
 
 void r_vertex(Cartesian &a) {
-	cout << a.r_vertex() << endl;
+	cout << a.get_r_vertex() << endl;
 }
 
 void r_point(Cartesian &a) {
-	cout << a.r_point() << endl;
+	cout << a.get_r_point() << endl;
 }
 
 void square(Cartesian &a) {
-	cout << a.square() << endl;
+	cout << a.get_square() << endl;
 }
 
 void max_len(Cartesian &a) {
-	cout << a.max_len() << endl;
+	cout << a.get_max_len() << endl;
 }
 
 void dist_to_max(Cartesian &a) {
-	cout << a.dist_to_max() << endl;
+	cout << a.get_dist_to_max() << endl;
 }
 
 void menu(Cartesian &a) {
-	void (*entries_func[])(Cartesian&) = {set_n, get_n, sq_side, dist, r_vertex, r_point, square, max_len, dist_to_max};
+	void (*entries_func[])(Cartesian&) = {set_coef, get_coef, sq_side, dist, r_vertex, r_point, square, max_len, dist_to_max};
+	// auto entries_func = {set_n, get_n, sq_side, dist, r_vertex, r_point, square, max_len, dist_to_max};
 	auto entries_text = {"1.Изменить коэффицент", 
 	"2. Посмотреть коэффицент", 
 	"3. Сторона квадрата, которая равна наибольшей хорде листа",

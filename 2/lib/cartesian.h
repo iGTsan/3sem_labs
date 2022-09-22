@@ -8,20 +8,20 @@ class Cartesian  {
 	*/
 public:
 	Cartesian ();
-	Cartesian (double);
+	Cartesian (const double);
 	Cartesian (const Cartesian&);
-	double get ();
-	void set (double);
-	double chord ();
-	double dist (double);
-	double r_vertex();
-	double r_point();
-	double square();
-	double max_len();
-	double dist_to_max();
+	const double get_coef ();
+	void set_coef (const double);
+	const double get_chord ();
+	const double get_dist (const double);
+	const double get_r_vertex();
+	const double get_r_point();
+	const double get_square();
+	const double get_max_len();
+	const double get_dist_to_max();
 
 private:
-	double n;
+	double coef;
 };
 
 #endif

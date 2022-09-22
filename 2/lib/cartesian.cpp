@@ -2,53 +2,53 @@
 #include <cmath>
 
 Cartesian::Cartesian () {
-	n = 1;
+	coef = 1;
 }
 
-Cartesian::Cartesian (double _n) {
-	n = _n;
+Cartesian::Cartesian (const double _coef) {
+	coef = _coef;
 }
 
 Cartesian::Cartesian (const Cartesian& cart) {
-	n = cart.n;
+	coef = cart.coef;
 }
 
-double Cartesian::get () {
-	return n;
+const double Cartesian::get_coef () {
+	return coef;
 }
 
-void Cartesian::set (double _n) {
-	n = _n;
+void Cartesian::set_coef (const double _coef) {
+	coef = _coef;
 }
 
-double Cartesian::chord () {
-	return std::abs(3 * n / sqrt(2));
+const double Cartesian::get_chord () {
+	return std::abs(3 * coef / sqrt(2));
 }
 
-double Cartesian::dist (double y) {
-	return std::abs(3 * n * cos(y) * sin(y) / 
+const double Cartesian::get_dist (const double y) {
+	return std::abs(3 * coef * cos(y) * sin(y) / 
 	(pow(cos(y), 3) + pow(sin(y), 3)));
 }
 
-double Cartesian::r_vertex() {
-	return std::abs(3 * n / (8 * sqrt(2)));
+const double Cartesian::get_r_vertex() {
+	return std::abs(3 * coef / (8 * sqrt(2)));
 
 }
 
-double Cartesian::r_point() {
-	return std::abs(3 * n / 2);
+const double Cartesian::get_r_point() {
+	return std::abs(3 * coef / 2);
 }
 
-double Cartesian::square() {
-	return 1.5 * n * n;
+const double Cartesian::get_square() {
+	return 1.5 * coef * coef;
 }
 
-double Cartesian::max_len() {
-	double l = chord();
+const double Cartesian::get_max_len() {
+	double l = get_chord();
 	return 2 * l / 3 * sqrt(2 * sqrt(3) - 3);
 }
 
-double Cartesian::dist_to_max() { 
-	double l = chord();
+const double Cartesian::get_dist_to_max() { 
+	double l = get_chord();
 	return l / 3 * sqrt(3);
 }
