@@ -1,4 +1,4 @@
-APP_SRC=app/main.cpp
+APP_SRC=app/app.cpp
 LIB_SRC=lib/words.cpp lib/input.cpp
 TEST_SRC=test/test.cpp
 LIB_OBJ=$(LIB_SRC:.cpp=.o)

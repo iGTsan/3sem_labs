@@ -12,25 +12,6 @@ using std::endl;
 
 void print(Words &w) {
 	w.print(cout);
-	/*
-	cout << "Новый коэффицент: ";
-	double n;
-	int good = 0;
-	while (!good){
-		try {
-			n = get_double();
-			good = 1;
-		}
-		catch (const char *s){
-			good = 0;
-			cout << s << endl;
-	 		if (cin.eof())
-	 			return;
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		}
-	}
-	a.set_coef(n);*/
 }
 
 void scan(Words &w) {
