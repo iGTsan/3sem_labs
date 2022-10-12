@@ -1,21 +1,11 @@
 #include "words.h"
-#include <string>
-#include <string.h>
-#include <stdexcept>
 
-Words::Words(const int _count, std::string from[]) {
-//	count = 0;
-//	std::cout << *from << std::endl;
+Words::Words(const int _count, const std::string from[]) {
 	if (_count > max_count)
 		throw std::overflow_error("Words overflow");
-	for (int i = 0; i < _count; i++) {
-		if (from[i].size() > word::max_len)
-			throw std::overflow_error("Letters overflow");
-		strcpy(data[i].letters, from[i].c_str());
-//		for (int j = 0; j < (int) from[i].size(); j++)
-//			data[i].letters[j] = from[i][j];
-	}
-	count = _count;
+	count = 0;
+	for (int i = 0; i < _count; i++)
+		add(from[i].c_str());
 }
 
 int cmp(const void *a, const void *b) {
@@ -23,11 +13,8 @@ int cmp(const void *a, const void *b) {
 }
 
 Words::Words(const char *from) {
-	int len = strlen(from);
-	if (len > word::max_len)
-		throw std::overflow_error("Letters overflow");
-	strcpy(data[0].letters, from);
-	count = 1;
+	count = 0;
+	add(from);
 }
 
 std::ostream & Words::print(std::ostream & c) {
@@ -36,42 +23,49 @@ std::ostream & Words::print(std::ostream & c) {
 	c << std::endl;
 	return (c);
 }
-std::istream & Words::scan(std::istream & c) { //throw
+std::istream & Words::scan(std::istream & c) {
 	int _count;
 	c >> _count;
+	if (c.fail())
+		throw input_error();
 	char buf[word::max_len];
 	for (int i = 0; i < _count; i++) {
+		if (c.eof())
+			throw input_error();
 		c >> buf;
-		this->add(buf);
+		add(buf);
 	}
 	return (c);
 }
 void Words::add(const char * from) {
-	if (count < max_count){
-		strncpy(data[count].letters, from, word::max_len);
+	if (strlen(from) > word::max_len)
+		throw std::overflow_error("Letters overflow");
+	if (count < max_count) {
+		strcpy(data[count].letters, from);
 		count++;
 	}
-	else
-		throw std::overflow_error("Overflow");
+	else {
+		throw std::overflow_error("Words overflow");
+	}
 }
 int Words::find(const char * s) {
 	for (int i = 0; i < count; i++)
-		if (strcmp(data[i].letters, s))
+		if (strcmp(data[i].letters, s) == 0)
 			return (i);
 	return (-1);
 }
-char * Words::index(int i) {
+char * Words::index(const int i) {
 	if (i >= 0 && i < count)
 		return (data[i].letters);
 	else
-		throw std::range_error("Incorrect index");
+		throw std::out_of_range("");
 }
-Words Words::first_letter(char c) {
+Words Words::first_letter(const char c) {
 	Words res;
 	int diff = 'a' - 'A';
 	if (c > 'Z')
 		diff = -diff;
-	for (int i = 0; i < c; i++)
+	for (int i = 0; i < count; i++)
 		if (data[i].letters[0] == c || data[i].letters[0] == c + diff)
 			res.add(data[i].letters);
 	return (res);
