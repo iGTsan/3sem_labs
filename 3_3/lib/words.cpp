@@ -18,20 +18,24 @@ Words::Words(const char *from) {
 }
 
 std::ostream& operator<<(std::ostream &c, const Words &w) {
+//std::ostream & Words::print(std::ostream & c) const{
 	for (int i = 0; i < w.count; i++)
 		if (i < w.count - 1)
 			c << w.data[i].letters << ' ';
 		else
 			c << w.data[i].letters;
+//	c << std::endl;
 	return (c);
 }
 
 std::istream& operator>>(std::istream &c, Words &w) {
+//std::istream & Words::scan(std::istream & c) {
 	int _count;
 	c >> _count;
 	if (c.fail())
 		throw Words::input_error();
 	char buf[Words::word::max_len];
+//	char buf[20];
 	for (int i = 0; i < _count; i++) {
 		if (c.eof())
 			throw Words::input_error();

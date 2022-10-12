@@ -49,10 +49,12 @@ TEST(Words, Input) {
 	std::stringstream input_stream;
 	input_stream << "3 abc cda ghf\n";
 	Words a;
+//	a.scan(input_stream);
 	input_stream >> a;
 	string output = print_Words(a);
 	ASSERT_EQ(strcmp(output.c_str(), "abc cda ghf"), 0);
 	input_stream << "0";
+//	a.scan(input_stream);
 	input_stream >> a;
 	output = print_Words(a);
 	ASSERT_EQ(strcmp(output.c_str(), "abc cda ghf"), 0);

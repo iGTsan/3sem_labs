@@ -11,6 +11,7 @@ using std::cout;
 using std::endl;
 
 void print(Words &w) {
+//	w.print(cout);
 	cout << w << endl;
 }
 
@@ -40,6 +41,7 @@ void index(Words &w) {
 void first_letter(Words &w) {
 	char c;
 	cin >> c;
+//	w.first_letter(c).print(cout);
 	cout << w.first_letter(c) << endl;
 }
 
@@ -49,6 +51,7 @@ void sort(Words &w) {
 
 void menu(Words &w) {
 	void (*entries_func[])(Words&) = {scan, print, add_word, find_word, index, first_letter, sort};
+	// auto entries_func = {set_n, get_n, sq_side, dist, r_vertex, r_point, square, max_len, dist_to_max};
 	auto entries_text = {"1.Ввод из входного потока",
 	"2. Вывод во входной поток",
 	"3. Добавление слова",
@@ -100,9 +103,9 @@ void menu(Words &w) {
 	 } while (c != 0);
 }
 
-
+/*
 int main() {
 	Words w;
 	menu(w);
 }
-
+*/
