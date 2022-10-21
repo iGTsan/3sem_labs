@@ -6,16 +6,21 @@
 
 using std::string;
 
+string s1[] = {"First", "second", "Third", "fourth", "Fifth"};
+string s2[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
+string _s1 = "First second Third fourth Fifth";
+string _s2 = "1 2 3 4 5 6 7 8 9 0";
+string _s3 = "abc";
+
 Words some_Words() {
-	string s[] = {"First", "second", "Third", "fourth", "Fifth"};
-	Words a(5, s);
+
+	Words a(5, s1);
 	return (a);
 }
 
 void more_Words(Words &a, int n) {
-	string s[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
 	for (int i = 0; i < n; i++)
-		a += s[i];
+		a += s2[i];
 }
 
 string print_Words(Words &a) {
@@ -28,24 +33,23 @@ string print_Words(Words &a) {
 TEST(Words, Output) {
 	Words a = some_Words();
 	string output = print_Words(a);
-	ASSERT_EQ(output, "First second Third fourth Fifth");
+	ASSERT_EQ(output, _s1);
 }
 
 TEST(Words, InitConstructor) {
 	ASSERT_NO_THROW(Words a);
 
-	Words b("abc");
+	Words b(_s3);
 	string output = print_Words(b);
-	ASSERT_EQ(output, "abc");
+	ASSERT_EQ(output, _s3);
 
-	string s[] = {"First", "second", "Third", "fourth", "Fifth"};
-	Words c(5, s);
+	Words c(5, s1);
 	output = print_Words(c);
-	ASSERT_EQ(output, "First second Third fourth Fifth");
+	ASSERT_EQ(output, _s1);
 
 	Words d(c);
 	output = print_Words(d);
-	ASSERT_EQ(output, "First second Third fourth Fifth");
+	ASSERT_EQ(output, _s1);
 }
 
 TEST(Words, Input) {
@@ -72,9 +76,9 @@ TEST(Words, Input) {
 
 TEST(Words, Add) {
 	Words a;
-	a += "abc";
+	a += _s3;
 	string output = print_Words(a);
-	ASSERT_EQ(output, "abc");
+	ASSERT_EQ(output, _s3);
 }
 
 TEST(Words, Plus) {
@@ -83,7 +87,7 @@ TEST(Words, Plus) {
 	more_Words(b, 10);
 	c = a + b;
 	string output = print_Words(c);
-	ASSERT_EQ(output, "First second Third fourth Fifth 1 2 3 4 5 6 7 8 9 0");
+	ASSERT_EQ(output, _s1 + ' ' + _s2);
 }
 
 TEST(Words, Find) {
