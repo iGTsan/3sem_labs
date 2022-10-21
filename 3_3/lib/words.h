@@ -5,36 +5,37 @@
 #include <string>
 #include <string.h>
 #include <stdexcept>
+#include <stdlib.h>
 
-
+using std::string;
 
 class Words {
 private:
-	typedef struct word {
-		int len = 0;
-		static const int max_len = 10;
-		char letters[max_len + 1];
-	} word;
-
-	static const int max_count = 10;
 	int count;
-	word data[max_count + 1];
+	int max_count;
+	string *data;
 public:
-	Words() : count(0) {};
-	Words(const int, const std::string[]);
-	Words(const char *);
+	Words() : count(0), max_count(0), data(nullptr) {};
+	Words(const int, const string[]);
+	Words(const string &);
+	Words(const Words &);
 
-	void add(const char *);
-	int find(const char *) const;
-	char * operator [](const int);
+	void operator +=(const string &);
+	void operator +=(const Words &);
+	Words operator +(const Words &) const;
+	Words& operator =(const Words &);
+	string& operator [](const int) const;
+	int operator [](const string &) const;
+	void operator ~();
 	Words first_letter(const char) const;
-	void sort();
 
 	class input_error : std::exception {};
 
 	friend std::ostream& operator<<(std::ostream &, const Words &);
 	friend std::istream& operator>>(std::istream &, Words &);
 	friend int cmp(const void*, const void*);
+
+	~Words();
 };
 
 #endif

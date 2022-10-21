@@ -11,7 +11,6 @@ using std::cout;
 using std::endl;
 
 void print(Words &w) {
-//	w.print(cout);
 	cout << w << endl;
 }
 
@@ -22,13 +21,13 @@ void scan(Words &w) {
 void add_word(Words &w) {
 	std::string s;
 	cin >> s;
-	w.add(s.c_str());
+	w += s;
 }
 
 void find_word(Words &w) {
 	std::string s;
 	cin >> s;
-	cout << w.find(s.c_str()) << endl;
+	cout << w[s] << endl;
 }
 
 void index(Words &w) {
@@ -41,17 +40,15 @@ void index(Words &w) {
 void first_letter(Words &w) {
 	char c;
 	cin >> c;
-//	w.first_letter(c).print(cout);
 	cout << w.first_letter(c) << endl;
 }
 
 void sort(Words &w) {
-	w.sort();
+	~w;
 }
 
 void menu(Words &w) {
 	void (*entries_func[])(Words&) = {scan, print, add_word, find_word, index, first_letter, sort};
-	// auto entries_func = {set_n, get_n, sq_side, dist, r_vertex, r_point, square, max_len, dist_to_max};
 	auto entries_text = {"1.Ввод из входного потока",
 	"2. Вывод во входной поток",
 	"3. Добавление слова",
@@ -94,18 +91,16 @@ void menu(Words &w) {
 			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 			cout << "Bad input in words" << endl;
 		}
-	 	catch (std::overflow_error &e) {
-			cout << e.what() << endl;
-		}
 	 	catch (std::out_of_range &e) {
 			cout << "Index out of range" << endl;
 		}
 	 } while (c != 0);
 }
 
-/*
+
 int main() {
 	Words w;
 	menu(w);
 }
-*/
+
+
