@@ -3,9 +3,7 @@
 
 #include <iostream>
 #include <string>
-#include <string.h>
 #include <stdexcept>
-#include <stdlib.h>
 
 using std::string;
 
@@ -33,7 +31,6 @@ public:
 
 	friend std::ostream& operator<<(std::ostream &, const Words &);
 	friend std::istream& operator>>(std::istream &, Words &);
-	friend int cmp(const void*, const void*);
 
 	~Words();
 };
