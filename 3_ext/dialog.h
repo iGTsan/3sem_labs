@@ -11,6 +11,7 @@ namespace dialog {
 	void new_bet(players::Players &, players::game_state &);
 	void check(players::Players &, players::game_state);
 	void add_player(players::Players &, players::game_state &);
+	void show_rules();
 
 
 }

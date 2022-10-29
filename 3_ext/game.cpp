@@ -27,10 +27,11 @@ void game() {
 			"2. Показать игроков",
 			"3. Новая ставка",
 			"4. Проверяем",
-			"5. Добавить игрока"
+			"5. Добавить игрока",
+			"6. Показать правила"
 	};
 //	void (*func[])(Players &, game_state &) = {show_dices, show_players, new_bet, check, add_player};
-	print_menu(s, 6);
+	print_menu(s, 7);
 	int c;
 	while ((c = int_input("", 0, 6))) {
 		switch (c) {
@@ -49,6 +50,8 @@ void game() {
 		case 5:
 			add_player(p, g);
 			break;
+		case 6:
+			show_rules();
 		}
 		print_menu(s, 6);
 	}

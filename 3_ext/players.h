@@ -21,25 +21,25 @@ namespace players {
 		int count_dices = 0;
 	public:
 		Player() : dices(0) {};
-		Player(string &, int n = 0);
-		void set_name(string &);
+		Player(const string &, const int n = 0);
+		void set_name(const string &);
 		string& get_name();
-		void set_count_of_dices(int);
+		void set_count_of_dices(const int);
 		void lose_dice();
-		int get_count_of_dices();
-		int get_count_of_dices(int);
+		int get_count_of_dices() const;
+		int get_count_of_dices(const int);
 		void throw_dices();
-		void show_dices();
+		void show_dices() const;
 	};
 
 	class Players {
 	private:
 		std::vector<Player> data;
 	public:
-		void add_player(string &, int);
-		Player& operator[] (int);
-		int size();
-		int get_count_of_dices(int);
+		void add_player(const string &, const int);
+		Player& operator[] (const int);
+		int size() const;
+		int get_count_of_dices(const int);
 		void throw_dices();
 	};
 }
