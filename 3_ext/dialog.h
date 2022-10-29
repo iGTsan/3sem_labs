@@ -1,34 +1,18 @@
 #ifndef DIALOG_H
 #define DIALOG_H
 
-#include "dice.h"
+#include "players.h"
+#include <limits.h>
 
-using namespace DiceSpace;
+namespace dialog {
+	void show_dices(players::Players &);
+	int int_input(string s = "", int l = 0, int r = INT_MAX);
+	void show_players(players::Players &);
+	void new_bet(players::Players &, players::game_state &);
+	void check(players::Players &, players::game_state);
+	void add_player(players::Players &, players::game_state &);
 
-namespace Dialog {
-    void throw_dice(Dice_vector &vector);
 
-    void insert_dice(Dice_vector &vector);
-
-    void remove_dice(Dice_vector &vector);
-
-    void remove_all_dices(Dice_vector &vector);
-
-    void display_dice(Dice_vector &vector);
-
-    void find_dice(Dice_vector &vector);
-
-    void sum_all_dices(Dice_vector &vector);
-
-    void check_for_coincidences(Dice_vector &vector);
-
-    void insert_with_value(Dice_vector &vector);
-
-    void sum_with_group(Dice_vector &vector);
-
-    void test_operators(Dice_vector &vector);
-
-    void create_new_group(Dice_vector &vector);
 }
 
-#endif //DIALOG_H
+#endif

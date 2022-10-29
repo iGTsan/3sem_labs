@@ -12,6 +12,7 @@ int *realloc_array(int *vector, int max_size) {
 }
 
 namespace DiceSpace {
+
     Dice_vector::Dice_vector(int n) {
         max_size = n;
         if (max_size < 1) {
@@ -22,7 +23,7 @@ namespace DiceSpace {
         for (int i = 0; i < max_size; ++i) {
             dice_vector[i] = 0;
         }
-        cout << "Constructor was called" << endl;
+//        cout << "Constructor was called" << endl;
     }
 
     Dice_vector::Dice_vector(const Dice_vector &vector) {
@@ -33,7 +34,7 @@ namespace DiceSpace {
         }
         amount = vector.amount;
 
-        cout << "Copy constructor was called " << endl;
+//        cout << "Copy constructor was called " << endl;
     }
 
 
@@ -49,7 +50,7 @@ namespace DiceSpace {
         vector.amount = 0;
         vector.max_size = 0;
 
-        cout << "Move constructor was called " << endl;
+//        cout << "Move constructor was called " << endl;
     }
 
     int Dice_vector::get_max_size() const {
@@ -73,7 +74,7 @@ namespace DiceSpace {
     }
 
     void Dice_vector::throw_dice() {
-        srand(time(NULL));
+        srand(clock());
         for (int i = 0; i < amount; ++i) {
             if (dice_vector[i] != 0) {
                 dice_vector[i] = rand() % 6 + 1;
@@ -82,7 +83,7 @@ namespace DiceSpace {
     }
 
     void Dice_vector::insert_dice() {
-        srand(time(NULL));
+        srand(clock());
         if (amount == max_size) {
             dice_vector = realloc_array(dice_vector, max_size);
             dice_vector[max_size] = rand() % 6 + 1;
@@ -101,7 +102,7 @@ namespace DiceSpace {
         if (number < 1 || number > amount) {
             throw ::std::logic_error("Dice not found");
         }
-        for (int i = 0; i < max_size; i++) {
+        for (int i = 0; i < max_size - 1; i++) {
             if (i == number - 1) {
                 i++;
             }
@@ -149,7 +150,7 @@ namespace DiceSpace {
     }
 
     Dice_vector::~Dice_vector() {
-        cout << "Destructor was called" << endl;
+//        cout << "Destructor was called" << endl;
         delete[]dice_vector;
     }
 
@@ -166,17 +167,17 @@ namespace DiceSpace {
         for (int i = temp.amount; i < temp.max_size; i++) {
             temp.dice_vector[i] = 0;
         }
-        cout << "Overloaded operator + was called " << endl;
+//        cout << "Overloaded operator + was called " << endl;
         return temp;
     }
 
     int Dice_vector::operator[](int value) {
-        cout << "Overloaded operator [] was called " << endl;
+//        cout << "Overloaded operator [] was called " << endl;
         return this->dice_vector[value - 1];
     }
 
     int Dice_vector::operator*() {
-        cout << "Overloaded operator * was called " << endl;
+//        cout << "Overloaded operator * was called " << endl;
         return this->sum_all_dices();
     }
 
@@ -186,7 +187,7 @@ namespace DiceSpace {
         }
         insert_dice();
         insert_value(value);
-        cout << "Overloaded operator += was called " << endl;
+//        cout << "Overloaded operator += was called " << endl;
         return *this;
     }
 
@@ -199,7 +200,7 @@ namespace DiceSpace {
             }
             amount = vector.amount;
 
-            cout << "Overloaded operator = (copy assigment) was called " << endl;
+//            cout << "Overloaded operator = (copy assigment) was called " << endl;
         }
         return *this;
     }
@@ -217,7 +218,7 @@ namespace DiceSpace {
             vector.amount = 0;
             vector.max_size = 0;
 
-            cout << "Overloaded operator = (move assigment) was called " << endl;
+//            cout << "Overloaded operator = (move assigment) was called " << endl;
         }
         return *this;
     }
@@ -229,7 +230,7 @@ std::ostream &operator<<(std::ostream &ostream, const DiceSpace::Dice_vector &ve
             ostream << i + 1 << ": " << "[" << vector.get_value(i) << "]" << endl;
         }
     }
-    cout << "Overloaded operator << was called" << endl;
+//    cout << "Overloaded operator << was called" << endl;
     return ostream;
 }
 
@@ -241,6 +242,6 @@ std::istream &operator>>(std::istream &istream, DiceSpace::Dice_vector &vector) 
     }
     vector.insert_dice();
     vector.insert_value(value);
-    cout << "Overloaded operator >> was called" << endl;
+//    cout << "Overloaded operator >> was called" << endl;
     return istream;
 }
