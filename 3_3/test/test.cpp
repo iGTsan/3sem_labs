@@ -13,7 +13,6 @@ string _s2 = "1 2 3 4 5 6 7 8 9 0";
 string _s3 = "abc";
 
 Words some_Words() {
-
 	Words a(5, s1);
 	return (a);
 }
@@ -50,6 +49,12 @@ TEST(Words, InitConstructor) {
 	Words d(c);
 	output = print_Words(d);
 	ASSERT_EQ(output, _s1);
+
+	Words e(std::move(d));
+	output = print_Words(e);
+	ASSERT_EQ(output, _s1);
+	output = print_Words(d);
+	ASSERT_EQ(output, "");
 }
 
 TEST(Words, Input) {

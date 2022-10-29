@@ -14,6 +14,15 @@ Words::Words(const Words &w) : Words::Words() {
 	*this += w;
 }
 
+Words::Words(Words &&w){
+	count = w.count;
+	data = w.data;
+	max_count = w.max_count;
+	w.count = 0;
+	w.max_count = 0;
+	w.data = nullptr;
+}
+
 std::ostream& operator<<(std::ostream &c, const Words &w) {
 	for (int i = 0; i < w.count; i++)
 		if (i < w.count - 1)
@@ -68,6 +77,16 @@ Words& Words::operator =(const Words &w) {
 	delete[] data;
 	data = nullptr;
 	*this += w;
+	return (*this);
+}
+
+Words& Words::operator =(Words &&w) {
+	count = w.count;
+	data = w.data;
+	max_count = w.max_count;
+	w.count = 0;
+	w.max_count = 0;
+	w.data = nullptr;
 	return (*this);
 }
 

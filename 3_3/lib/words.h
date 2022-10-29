@@ -17,11 +17,13 @@ public:
 	Words(const int, const string[]);
 	Words(const string &);
 	Words(const Words &);
+	Words(Words &&);
 
 	void operator +=(const string &);
 	void operator +=(const Words &);
 	Words operator +(const Words &) const;
 	Words& operator =(const Words &);
+	Words& operator =(Words &&);
 	string& operator [](const int) const;
 	int operator [](const string &) const;
 	void operator ~();
