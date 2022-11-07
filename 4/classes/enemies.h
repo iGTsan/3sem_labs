@@ -10,7 +10,7 @@
 
 #include "basic.h"
 #include "consts.h"
-#include <queue>
+#include <deque>
 
 namespace GC = game_consts;
 
@@ -18,7 +18,7 @@ namespace game_objects {
 	/**
 	 *  \brief Класс враг
 	 */
-	class EnemySpecialization : Cell {
+	class EnemySpecialization : public Cell {
 	protected:
 		std::string name;
 		const int max_health;
@@ -27,29 +27,32 @@ namespace game_objects {
 		const int speed;
 		const int damage;
 		const int radius;
+		const int recoil;
+		const int shift;
 		virtual void move(Game&) = 0;
 		virtual void fire(Game&) const = 0;
 
 	public:
 		EnemySpecialization(int x, int y, int _max_health,
 				int _regeneration_speed, int _speed,
-				int _damage, int _radius) : Cell(x, y, GC::enemy_symb),
+				int _damage, int _radius, int _recoil, int _shift) : Cell(x, y, GC::enemy_symb),
 					max_health(_max_health), health(max_health), regeneration_speed(_regeneration_speed),
-					speed(_speed), damage(_damage), radius(_radius) {};
+					speed(_speed), damage(_damage), radius(_radius), recoil(_recoil), shift(_shift) {};
 		bool is_alive() const {return (health > 0);}
 		virtual ~EnemySpecialization();
 		friend class Enemy;
 	};
 
-	class Enemy : Unit {
+	class Enemy : public Unit {
 	private:
 		EnemySpecialization *specialization;
 	protected:
 		void regeneration();
-		void move(Game& game) {specialization->move(game);}
-		void fire(Game& game) const {specialization->fire(game);}
+		void move(Game& game);
+		void fire(Game& game) const;
 	public:
-		Enemy(int x, int y, int type);
+		Enemy(int x, int y, int type, int shift);
+		void get_damage(int damage) override {specialization->health -= damage, std::cout << specialization->health << " Здоровья осталось" << std::endl;};
 		virtual void Action(Game& game) override
 			{regeneration(), move(game), fire(game);}
 		bool is_alive() const override {return (specialization->is_alive());}
@@ -62,8 +65,8 @@ namespace game_objects {
 		void place_aura(Game& game) const;
 		void displace_aura(Game& game) const;
 	public:
-		HeroEnemy(int x, int y, int type, aura _hero_aura) :
-			Enemy(x, y, type), hero_aura(_hero_aura) {};
+		HeroEnemy(int x, int y, int type, int shift, aura _hero_aura) :
+			Enemy(x, y, type, shift), hero_aura(_hero_aura) {};
 		void Action(Game& game) override
 			{regeneration(), displace_aura(game),
 			move(game), place_aura(game), fire(game);}
@@ -71,40 +74,44 @@ namespace game_objects {
 	};
 
 	class Tank : EnemySpecialization {
-	private:
+		friend class Enemy;
+	protected:
 		void move(Game&) override;
 		void fire(Game&) const override;
 	public:
-		Tank(int x, int y);
+		Tank(int x, int y, int shift);
 	};
 
 	class Light : EnemySpecialization {
-	private:
+		friend class Enemy;
+	protected:
 		void move(Game&) override;
 		void fire(Game&) const override;
 	public:
-		Light(int x, int y);
+		Light(int x, int y, int shift);
 	};
 
 	class Aviation : EnemySpecialization {
-	private:
+		friend class Enemy;
+	protected:
 		void move(Game&) override;
 		void fire(Game&) const override;
 	public:
-		Aviation(int x, int y);
+		Aviation(int x, int y, int shift);
 	};
 
 	/**
 	 *  \brief Класс логово
 	 */
 
-	class Lair : Unit {
+	class Lair : public Unit {
 		private:
-			std::queue<enemy_out> enemies;
+			std::deque<enemy_out> enemies;
 		public:
-			Lair(int x=0, int y=0) : Unit(x, y, 'a') {};
-			void Action(Game&) override {};
-			void add(enemy_out &enemy);
+			void get_damage(int damage) override {};
+			Lair(int x=0, int y=0);
+			void Action(Game&) override;
+			void add(const enemy_out &enemy);
 			bool is_alive() const {return (1);}
 		};
 }
