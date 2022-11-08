@@ -32,13 +32,24 @@ namespace game_objects {
 			regeneration -= other.regeneration;
 			return (*this);
 		}
+		bool operator==(const aura& other) const {
+			if (other.health != health)
+				return (0);
+			if (other.speed != speed)
+				return (0);
+			if (other.regeneration != regeneration)
+				return (0);
+			return (1);
+		}
 	} aura;
 
 
 	typedef struct enemy_out {
 		const int time;
 		const int type;
-		enemy_out(int _time, int _type) : time(_time), type(_type) {};
+		const aura aur;
+		enemy_out(int _time, int _type) : time(_time), type(_type), aur({0,0,0}) {};
+		enemy_out(int _time, int _type, const aura& _aura) : time(_time), type(_type), aur(_aura) {};
 	} enemy_out;
 }
 

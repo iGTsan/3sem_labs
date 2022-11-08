@@ -10,7 +10,7 @@ namespace game_consts {
 	constexpr int tank_max_health = 30;
 	constexpr int light_max_health = 15;
 	constexpr int aviation_max_health = 20;
-	constexpr int wall_max_health = 100;
+	constexpr int wall_max_health = 10;
 
 	constexpr int tank_regeneration_speed = 1;
 	constexpr int light_regeneration_speed = 1;
@@ -63,6 +63,7 @@ namespace game_consts {
 																		{100, 1000, 1000, 15}};
 
 	constexpr int wall_cost = 30;
+	constexpr int wall_repair_cost = 25;
 }
 
 

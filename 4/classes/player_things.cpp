@@ -1,11 +1,18 @@
 #include "player_things.h"
+#include "../engine/game_engine.h"
 
-namespace GC = game_consts;
+using namespace game_engine;
 
-void game_objects::Wall::repair(Game&) {
+void game_objects::Wall::repair(Game& game) {
+	int add_health = std::min(max_health - health,
+			game.balance * GC::wall_repair_cost / max_health);
+	health += add_health;
+	game.balance -= add_health * GC::wall_repair_cost / max_health;
 }
 
 void game_objects::Tower::fire(Game& game) const {
+	if (game.counter % chars_table[level].recoil)
+		return;
 	int x, y;
 	if (bfs(game.get_landscape(), get_x_cord(), get_y_cord(),
 			1, GC::aviation_type, GC::enemy_symb, x, y, chars_table[level].radius))
@@ -17,16 +24,18 @@ game_objects::Tower::Tower(int x, int y, int _level) :
 
 }
 
-void game_objects::Tower::level_up(Game&) {
+void game_objects::Tower::level_up(Game& game) {
+	if (level == max_level - 1)
+		throw std::runtime_error("Максимальный уровень уже достигнут");
+	if (game.balance < chars_table[level + 1].cost)
+		throw std::runtime_error("Недостаточно средств");
+	level++;
+	game.balance -= chars_table[level].cost;
 }
 
 game_objects::Castle::Castle(int x, int y, const std::string& _name, int _level) :
 		Wall(x, y), Tower(x, y, _level) {
-//	chars_table = GC::castle_chars_table;
-}
-
-void game_objects::Castle::set(int x, int y, const std::string &_name,
-		int _level) {
+	health = chars_table[level].max_health;
 }
 
 void game_objects::Castle::Action(Game& game) {
@@ -34,8 +43,11 @@ void game_objects::Castle::Action(Game& game) {
 	game.balance += chars_table[level].profit * health / chars_table[level].max_health;
 }
 
-void game_objects::Tower::Action(Game &game) {
-	if (game.counter % chars_table[level].recoil)
-		return;
-	fire(game);
+void game_objects::Castle::level_up(GE::Game& game) {
+	if (level == max_level - 1)
+		throw std::runtime_error("Максимальный уровень уже достигнут");
+	if (game.balance < chars_table[level + 1].cost)
+		throw std::runtime_error("Недостаточно средств");
+	level++;
+	game.balance -= chars_table[level].cost;
 }

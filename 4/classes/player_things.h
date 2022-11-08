@@ -9,10 +9,11 @@ namespace GC = game_consts;
 
 
 namespace game_objects {
+
 	/**
 	 *  \brief Класс защитная стена
 	 */
-	class Wall : Unit {
+	class Wall : public Unit {
 	private:
 		static const int max_health = GC::wall_max_health;
 	protected:
@@ -21,8 +22,9 @@ namespace game_objects {
 		Wall(int x, int y) :
 			Unit(x, y, GC::wall_symb), health(max_health) {};
 		void get_damage(int damage) override {health -= damage;};
-		void repair(Game &);
+		void repair(GE::Game &);
 		bool is_alive() const override {return (health > 0);}
+		void Action(GE::Game &) override {};
 	};
 	/**
 	 *  \brief Класс защитная башня
@@ -32,15 +34,15 @@ namespace game_objects {
 		const int id = 0;
 		const static int max_id = 0;
 		constexpr static const tower_chars *chars_table = GC::tower_chars_table;
-		void fire(Game&) const;
+		void fire(GE::Game&) const;
+		const static int max_level = GC::tower_max_level;
 	protected:
-		const static int max_level;
 		int level;
 	public:
 		void get_damage(int damage) override {};
 		Tower(int x, int y, int _level=0);
-		void level_up(Game&);
-		virtual void Action(Game& game) override;
+		virtual void level_up(GE::Game&);
+		virtual void Action(GE::Game& game) override {fire(game);};
 		bool is_alive() const override {return (1);}
 	};
 
@@ -49,6 +51,7 @@ namespace game_objects {
 	 */
 	class Castle : public Wall, Tower {
 	private:
+		const static int max_level = GC::castle_max_level;
 		std::string name;
 		constexpr static const castle_chars *chars_table = GC::castle_chars_table;
 	public:
@@ -56,10 +59,10 @@ namespace game_objects {
 		Castle(int x, int y, const std::string& _name, int _level=0);
 		void set(int x, int y, const std::string& _name, int _level=0);
 		int get_health() {return (health);}
-		void Action(Game&) override;
+		void Action(GE::Game&) override;
 		void get_damage(int damage) {Wall::get_damage(damage);};
 		bool is_alive() const {return (Wall::is_alive());}
-//		Castle& operator=(Castle& other);
+		void level_up(GE::Game&) override;
 	};
 }
 

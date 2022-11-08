@@ -10,17 +10,18 @@
 
 #include "consts.h"
 #include "additional_classes.h"
+#include "../engine/game_engine_prot.h"
 #include <iostream>
 #include <vector>
 #include <deque>
 #include <memory>
 
 namespace GC = game_consts;
+namespace GE = game_engine;
 
 namespace game_objects {
-	class Game;
-	class Castle;
-	class Lair;
+//	class Game;
+//	class
 
 	class Cell {
 	protected:
@@ -42,7 +43,7 @@ namespace game_objects {
 	public:
 		Unit(int x, int y, char symb) :
 			Cell(x, y, symb) {};
-		virtual void Action(Game&) = 0;
+		virtual void Action(GE::Game&) = 0;
 		virtual bool is_alive() const = 0;
 		virtual void get_damage(int damage) = 0;
 	};
@@ -77,45 +78,8 @@ namespace game_objects {
 	};
 
 	bool bfs(const Landscape& land, int x_from, int y_from,
-			int type, int way_type, char to_find, int &x, int &y, int radius = 0);
+			int type, int way_type, char to_find, int &x, int &y, int radius = -1);
 
-	class Game {
-		private:
-			Landscape field;
-			Castle *castle = nullptr;
-			Lair *lair = nullptr;
-			std::deque<Unit*> units_queue;
-			std::vector<std::vector<std::vector<Unit*>>> units_field;
-			std::vector<std::vector<Unit*>> towers_field;
-			std::vector<std::vector<aura>> aura_field;
-			std::string player_name;
-			const unsigned long long max_counter = 200;
-			void set_cords();
-			int enemy_cnt = 0;
-		public:
-			unsigned long long counter = 0;
-			int balance = 0;
-			Game(const std::string& _player_name) : player_name(_player_name) {};
-			void change_landscape(int land_x_size, int land_y_size,
-					const std::vector<std::string>* _field = nullptr);
-			void load_landscape(const std::string& filename);
-			void save_landscape(const std::string& filename);
-			void move_unit(int x_from, int y_from, int x_to, int y_to, Unit* unit);
-			void add_enemy(int type, int time);
-			void add_enemy(int type, aura &a, int time);
-			void add_tower(int x, int y);
-			void add_wall(int x, int y);
-			void add_to_queue(int type);
-			void add_to_queue(int type, aura &a);
-			void tower_level_up(int x, int y);
-			void castle_level_up();
-			void get_damage(int x, int y, int damage);
-			Landscape& get_landscape() {return (field);}
-			Castle& get_castle() {return (*castle);}
-			void show_field();
-			bool is_end();
-			void tic();
-		};
 }
 
 
