@@ -1,0 +1,12 @@
+
+# Tower defence
+
+Игра в жанре Tower Defence с генератором уровней(будет) 
+
+
+## Установка (Linux)
+1. Поставить SFML (https://www.sfml-dev.org/tutorials/2.5/)
+2. Запустить Cmake
+3. Запустить Make
+4. Запустить TD
+5. Наслаждаться

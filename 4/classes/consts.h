@@ -12,17 +12,17 @@ namespace game_consts {
 	constexpr int aviation_max_health = 20;
 	constexpr int wall_max_health = 10;
 
-	constexpr int tank_regeneration_speed = 1;
-	constexpr int light_regeneration_speed = 1;
-	constexpr int aviation_regeneration_speed = 1;
+	constexpr int tank_regeneration_speed = 100;
+	constexpr int light_regeneration_speed = 100;
+	constexpr int aviation_regeneration_speed = 100;
 
-	constexpr int tank_speed = 3;
-	constexpr int light_speed = 2;
-	constexpr int aviation_speed = 1;
+	constexpr int tank_speed = 180;
+	constexpr int light_speed = 120;
+	constexpr int aviation_speed = 60;
 
-	constexpr int tank_recoil = 3;
-	constexpr int light_recoil = 2;
-	constexpr int aviation_recoil = 3;
+	constexpr int tank_recoil = 180;
+	constexpr int light_recoil = 120;
+	constexpr int aviation_recoil = 180;
 
 	constexpr int tank_radius = 2;
 	constexpr int light_radius = 2;
@@ -50,17 +50,18 @@ namespace game_consts {
 	constexpr int tower_max_level = 5;
 	constexpr int castle_max_level = 5;
 
-	constexpr GO::tower_chars tower_chars_table[tower_max_level] = {{3, 10, 2, 3},
-																{3, 25, 4, 5},
-																{2, 50, 7, 7},
-																{2, 80, 10, 9},
-																{1, 130, 12, 20}};
+	constexpr GO::tower_chars tower_chars_table[tower_max_level] = {{180, 10, 2, 3},
+																{150, 25, 4, 5},
+																{120, 50, 7, 7},
+																{90, 80, 10, 9},
+																{60, 130, 12, 20}};
 
-	constexpr GO::castle_chars castle_chars_table[castle_max_level] = {{10, 0, 50, 1},
-																		{15, 150, 100, 3},
-																		{25, 250, 150, 5},
-																		{50, 500, 500, 10},
-																		{100, 1000, 1000, 15}};
+	constexpr GO::castle_chars castle_chars_table[castle_max_level] = {{10, 0, 50, 10},
+																		{8, 150, 100, 15},
+																		{6, 250, 150, 25},
+																		{3, 500, 500, 50},
+																		{1, 1000, 1000, 100}};
+	constexpr int castle_profit_speed = 60;
 
 	constexpr int wall_cost = 30;
 	constexpr int wall_repair_cost = 25;

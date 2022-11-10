@@ -97,30 +97,30 @@ void Game::get_damage(int x, int y, int damage) {
 
 void Game::add_tower(int x, int y) {
 	if (balance < GC::tower_chars_table[0].cost)
-		throw std::runtime_error("Недостаточно средств");
+		throw std::runtime_error("Low money");
 	if (x < 0 || x >= field.get_x_size() ||
 			y < 0 || y >= field.get_y_size())
-		throw std::runtime_error("Неправильные координаты");
+		throw std::runtime_error("Wrong cords");
 	if (towers_field[x][y] != nullptr)
-		throw std::runtime_error("Место уже занято");
+		throw std::runtime_error("Place isn't empty");
 	balance -= GC::tower_chars_table[0].cost;
 	Tower* new_tower = new Tower(x, y);
 	units_queue.push_front(new_tower);
 	towers_field[x][y] = (new_tower);
-	field.set_cell(x, y, GC::tower_symb);
-	field.set_main_cell(x, y, GC::tower_symb);
+//	field.set_cell(x, y, GC::tower_symb);
+//	field.set_main_cell(x, y, GC::tower_symb);
 }
 
 void Game::add_wall(int x, int y) {
 	if (balance < GC::wall_cost)
-		throw std::runtime_error("Недостаточно средств");
+		throw std::runtime_error("Low money");
 	if (x < 0 || x >= field.get_x_size() ||
 			y < 0 || y >= field.get_y_size())
-		throw std::runtime_error("Неправильные координаты");
+		throw std::runtime_error("Wrong cords");
 	auto it = units_field[x][y].begin();
 	while (it != units_field[x][y].end()) {
 		if ((static_cast<GO::Unit*>((*it)))->get_symb() == GC::wall_symb)
-			throw std::runtime_error("Место уже занято");
+			throw std::runtime_error("place isn't empty");
 		it++;
 	}
 	balance -= GC::wall_cost;

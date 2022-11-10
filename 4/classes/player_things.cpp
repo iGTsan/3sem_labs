@@ -26,9 +26,9 @@ game_objects::Tower::Tower(int x, int y, int _level) :
 
 void game_objects::Tower::level_up(Game& game) {
 	if (level == max_level - 1)
-		throw std::runtime_error("Максимальный уровень уже достигнут");
+		throw std::runtime_error("Max level reached");
 	if (game.balance < chars_table[level + 1].cost)
-		throw std::runtime_error("Недостаточно средств");
+		throw std::runtime_error("Low money");
 	level++;
 	game.balance -= chars_table[level].cost;
 }
@@ -39,15 +39,17 @@ game_objects::Castle::Castle(int x, int y, const std::string& _name, int _level)
 }
 
 void game_objects::Castle::Action(Game& game) {
-	health = std::min(chars_table[level].max_health, health + chars_table[level].repair_speed);
-	game.balance += chars_table[level].profit * health / chars_table[level].max_health;
+	if (game.counter % chars_table[level].repair_speed == 0)
+		health = std::min(chars_table[level].max_health, health + 1);
+	if (game.counter % GC::castle_profit_speed == 0)
+		game.balance += chars_table[level].profit * health / chars_table[level].max_health;
 }
 
 void game_objects::Castle::level_up(GE::Game& game) {
 	if (level == max_level - 1)
-		throw std::runtime_error("Максимальный уровень уже достигнут");
+		throw std::runtime_error("Max level reached");
 	if (game.balance < chars_table[level + 1].cost)
-		throw std::runtime_error("Недостаточно средств");
+		throw std::runtime_error("Low money");
 	level++;
 	game.balance -= chars_table[level].cost;
 }

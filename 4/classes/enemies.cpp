@@ -11,9 +11,11 @@ void game_objects::Lair::add(const enemy_out &enemy) {
 }
 
 void game_objects::Enemy::regeneration(GE::Game& game) {
+	if (game.counter % specialization->regeneration_speed)
+		return;
 	new_max_health = specialization->max_health +
 			game.aura_field[get_x_cord()][get_y_cord()].health;
-	specialization->health = std::min(specialization->health + specialization->regeneration_speed +
+	specialization->health = std::min(specialization->health + 1 +
 			game.aura_field[get_x_cord()][get_y_cord()].regeneration, new_max_health);
 }
 

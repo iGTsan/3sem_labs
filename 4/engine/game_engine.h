@@ -19,13 +19,13 @@ namespace game_engine {
 		GO::Castle *castle = nullptr;
 		GO::Lair *lair = nullptr;
 		std::deque<GO::Unit*> units_queue;
-		std::vector<std::vector<std::vector<GO::Unit*>>> units_field;
-		std::vector<std::vector<GO::Tower*>> towers_field;
 		std::string player_name;
 		const unsigned long long max_counter = 200;
 		void set_cords();
 		int enemy_cnt = 0;
 	public:
+		std::vector<std::vector<std::vector<GO::Unit*>>> units_field;
+		std::vector<std::vector<GO::Tower*>> towers_field;
 		std::vector<std::vector<GO::aura>> aura_field;
 		unsigned long long counter = 0;
 		int balance = 0;
