@@ -96,31 +96,6 @@ std::ostream& operator <<(std::ostream& c, const game_objects::Landscape& land) 
 	return (land.show(c));
 }
 
-
-bool check_cell(int way_type, char symb) {
-	if (way_type == GC::light_type)
-		if (symb == GC::mountain_symb ||
-				symb == GC::river_symb ||
-				symb == GC::wall_symb )
-			return (0);
-		else
-			return (1);
-	else if (way_type == GC::tank_type)
-		if (symb == GC::mountain_symb ||
-				symb == GC::river_symb)
-			return (0);
-		else
-			return (1);
-	else if (way_type == GC::aviation_type)
-		if (symb == GC::mountain_symb)
-			return (0);
-		else
-			return (1);
-	else if (way_type == GC::just_way_type)
-		return (1);
-	return (1);
-}
-
 std::ostream& game_objects::Landscape::show(std::ostream &c) const {
 	system("clear");
 	for (auto s: field_w_units) {
@@ -156,8 +131,37 @@ std::ostream& game_objects::Landscape::show(std::ostream &c) const {
 		}
 		c << std::endl;
 	}
-//		c << s << std::endl;
 	return (c);
+}
+
+bool check_cell(int way_type, char symb) {
+	if (way_type == GC::light_type)
+		if (symb == GC::mountain_symb ||
+				symb == GC::river_symb ||
+				symb == GC::wall_symb )
+			return (0);
+		else
+			return (1);
+	else if (way_type == GC::tank_type)
+		if (symb == GC::mountain_symb ||
+				symb == GC::river_symb)
+			return (0);
+		else
+			return (1);
+	else if (way_type == GC::aviation_type)
+		if (symb == GC::mountain_symb)
+			return (0);
+		else
+			return (1);
+	else if (way_type == GC::just_way_type)
+		return (1);
+	return (1);
+}
+
+bool is_enemy(char symb) {
+	return (symb == GC::tank_symb || symb == GC::hero_tank_symb ||
+			symb == GC::light_symb || symb == GC::hero_light_symb ||
+			symb == GC::aviation_symb || symb == GC::hero_aviation_symb);
 }
 
 bool game_objects::bfs(const Landscape &land, int x_from, int y_from, int type,
@@ -175,7 +179,8 @@ bool game_objects::bfs(const Landscape &land, int x_from, int y_from, int type,
 			break;
 		q.pop_front();
 
-		if (land.field_w_units[x_now][y_now] == to_find) {
+		if (land.field_w_units[x_now][y_now] == to_find ||
+				(to_find == GC::enemy_symb && is_enemy(land.field_w_units[x_now][y_now]))) {
 			if (type == 1) {
 				x = x_now;
 				y = y_now;

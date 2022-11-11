@@ -30,6 +30,7 @@ namespace sf_my {
 		virtual int is_clicked(int x, int y);
 		int is_active(int x, int y);
 		virtual void show(sf::RenderWindow &window);
+		void resize();
 		virtual ~Button() {};
 	};
 
@@ -101,6 +102,15 @@ namespace sf_my {
 		int is_clicked(int x, int y);
 		int is_active(int x, int y);
 		~MenuPart();
+	};
+
+	class Sprite {
+	private:
+		sf::Texture texture;
+		sf::Sprite sprite;
+	public:
+		Sprite(const std::string &filename);
+		sf::Sprite& get_sprite() {return (sprite);}
 	};
 }
 

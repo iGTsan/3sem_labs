@@ -25,6 +25,7 @@ namespace game_objects {
 		void repair(GE::Game &);
 		bool is_alive() const override {return (health > 0);}
 		void Action(GE::Game &) override {};
+		double get_percent_health() const override;
 	};
 	/**
 	 *  \brief Класс защитная башня
@@ -44,6 +45,7 @@ namespace game_objects {
 		virtual void level_up(GE::Game&);
 		virtual void Action(GE::Game& game) override {fire(game);};
 		bool is_alive() const override {return (1);}
+		double get_percent_health() const override {return (1);}
 	};
 
 	/**
@@ -63,6 +65,7 @@ namespace game_objects {
 		void get_damage(int damage) {Wall::get_damage(damage);};
 		bool is_alive() const {return (Wall::is_alive());}
 		void level_up(GE::Game&) override;
+		double get_percent_health() const override {return (Wall::get_percent_health());}
 	};
 }
 

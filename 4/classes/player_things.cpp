@@ -53,3 +53,7 @@ void game_objects::Castle::level_up(GE::Game& game) {
 	level++;
 	game.balance -= chars_table[level].cost;
 }
+
+double game_objects::Wall::get_percent_health() const {
+	return (static_cast<double>(health) / max_health);
+}

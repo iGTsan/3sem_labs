@@ -40,7 +40,13 @@ namespace game_consts {
 	constexpr char castle_symb = 'C';
 	constexpr char lair_symb = 'L';
 	constexpr char enemy_symb = 'E';
-	constexpr char tower_symb = 'T';
+	constexpr char tank_symb = 't';
+	constexpr char light_symb = 'l';
+	constexpr char aviation_symb = 'a';
+	constexpr char hero_tank_symb = 'T';
+	constexpr char hero_light_symb = 'L';
+	constexpr char hero_aviation_symb = 'A';
+	constexpr char tower_symb = 'O';
 
 	constexpr int light_type = 1;
 	constexpr int tank_type = 2;
@@ -50,17 +56,17 @@ namespace game_consts {
 	constexpr int tower_max_level = 5;
 	constexpr int castle_max_level = 5;
 
-	constexpr GO::tower_chars tower_chars_table[tower_max_level] = {{180, 10, 2, 3},
+	constexpr GO::tower_chars tower_chars_table[tower_max_level] = {{180, 20, 2, 3},
 																{150, 25, 4, 5},
 																{120, 50, 7, 7},
 																{90, 80, 10, 9},
 																{60, 130, 12, 20}};
 
-	constexpr GO::castle_chars castle_chars_table[castle_max_level] = {{10, 0, 50, 10},
-																		{8, 150, 100, 15},
-																		{6, 250, 150, 25},
-																		{3, 500, 500, 50},
-																		{1, 1000, 1000, 100}};
+	constexpr GO::castle_chars castle_chars_table[castle_max_level] = {{10, 0, 50, 120},
+																		{15, 150, 100, 100},
+																		{25, 250, 150, 80},
+																		{50, 500, 500, 60},
+																		{100, 1000, 1000, 40}};
 	constexpr int castle_profit_speed = 60;
 
 	constexpr int wall_cost = 30;

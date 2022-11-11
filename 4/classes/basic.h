@@ -46,6 +46,7 @@ namespace game_objects {
 		virtual void Action(GE::Game&) = 0;
 		virtual bool is_alive() const = 0;
 		virtual void get_damage(int damage) = 0;
+		virtual double get_percent_health() const = 0;
 	};
 	/**
 	 *	\brief Класс ландшафт

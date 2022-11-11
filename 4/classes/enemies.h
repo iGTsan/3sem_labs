@@ -57,6 +57,7 @@ namespace game_objects {
 		virtual void Action(GE::Game& game) override
 			{regeneration(game), move(game), fire(game);}
 		bool is_alive() const override {return (specialization->is_alive());}
+		double get_percent_health() const override;
 	};
 
 	class HeroEnemy : public Enemy {
@@ -67,8 +68,7 @@ namespace game_objects {
 		void displace_aura(GE::Game& game);
 		void aura_bfs(GE::Game& game, int type);
 	public:
-		HeroEnemy(int x, int y, int type, int shift, aura _hero_aura) :
-			Enemy(x, y, type, shift), hero_aura(_hero_aura) {};
+		HeroEnemy(int x, int y, int type, int shift, aura _hero_aura);
 		void Action(GE::Game& game) override
 			{regeneration(game), displace_aura(game),
 			move(game), place_aura(game), fire(game);}
@@ -115,6 +115,8 @@ namespace game_objects {
 			void Action(GE::Game&) override;
 			void add(const enemy_out &enemy);
 			bool is_alive() const {return (1);}
+			int time_last_enemy();
+			double get_percent_health() const override {return (1);}
 		};
 }
 

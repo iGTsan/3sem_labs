@@ -9,10 +9,11 @@ sf_my::Button::Button(int pos_x, int pos_y, int size_x, int size_y, int return_c
 	pos_x(pos_x), pos_y(pos_y), size_x(size_x), size_y(size_y), return_code(return_code) {
 	font.loadFromFile(beauty_font);
 	text.setFont(font);
-	sprite.setFillColor(sf::Color::Black);
+	text.setFillColor(font_color);
+	sprite.setFillColor(button_color);
 	sprite.setOutlineThickness(1);
 	active_outline_color = sf::Color::Green;
-	set_outline_color(sf::Color::White);
+	set_outline_color(bourder_color);
 	set_size(size_x, size_y);
 	set_pos(pos_x, pos_y);
 }
@@ -250,5 +251,17 @@ int sf_my::RadioButtons::is_clicked(int x, int y) {
 			return (res);
 		}
 	return (res);
+}
+
+sf_my::Sprite::Sprite(const std::string &filename) {
+	texture.loadFromFile(filename);
+	sprite.setTexture(texture);
+}
+
+void sf_my::Button::resize() {
+	sf::Vector2f pos = sprite.getPosition();
+	pos_x = pos.x;
+	pos_y = pos.y;
+	std::cout << pos_x << ' ' << pos_y << std::endl;
 }
 /// саша я тебя люблю

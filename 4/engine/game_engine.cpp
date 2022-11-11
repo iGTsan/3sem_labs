@@ -53,9 +53,18 @@ void Game::show_field() {
 			" Деньги: "  << balance << " Время: " << counter << std::endl;
 }
 
-bool Game::is_end() {
-	return (counter > max_counter ||
-			!castle->is_alive());
+int Game::is_end() {
+	if (!castle->is_alive())
+		return (-1);
+	if (lair->time_last_enemy() == 0) {
+		for (auto row: units_field)
+			for (auto cell: row)
+				for (auto unit: cell)
+					if (unit->get_symb() != GC::wall_symb)
+						return (0);
+		return (1);
+	}
+	return (0);
 }
 
 void Game::add_to_queue(int type) {
@@ -137,6 +146,38 @@ void Game::castle_level_up() {
 	castle->level_up(*this);
 }
 
+void game_engine::Game::repair_wall(int x, int y) {
+	auto it = units_field[x][y].begin();
+	while (it != units_field[x][y].end()) {
+		if ((static_cast<GO::Unit*>((*it)))->get_symb() == GC::wall_symb) {
+			(static_cast<GO::Wall*>((*it)))->repair(*this);
+			return;
+		}
+		it++;
+	}
+	if (it == units_field[x][y].end())
+		throw std::runtime_error("There is no wall");
+}
+
+void game_engine::Game::add_random_enemy() {
+	int type = std::rand() % 3 + 1;
+	int is_hero = std::rand() % 10;
+	GO::aura aur;
+	int time = std::rand() % 300;
+	time = std::max(counter, lair->time_last_enemy()) + time;
+	if (!is_hero) {
+		aur.health = std::rand() % 100;
+		aur.health = (aur.health * aur.health * aur.health) / 1000000;
+		aur.regeneration = std::rand() % 100;
+		aur.regeneration = (aur.regeneration * aur.regeneration * aur.regeneration) / 1000000;
+		aur.speed = std::rand() % 100;
+		aur.speed = (aur.speed * aur.speed * aur.speed) / 1000000;
+		lair->add(enemy_out(time, type, aur));
+	}
+	else
+		lair->add(enemy_out(time, type));
+}
+
 void Game::tic() {
 	lair->Action(*this);
 	castle->Action(*this);
@@ -149,10 +190,6 @@ void Game::tic() {
 		else {
 			auto unit = units_queue.front();
 			units_queue.pop_front();
-//			auto it = units_field[unit->get_x_cord()][unit->get_y_cord()].begin();
-//			while (*it != unit)
-//				it++;
-//			units_field[unit->get_x_cord()][unit->get_y_cord()].erase(it);
 			if (units_field[unit->get_x_cord()][unit->get_y_cord()].empty())
 				field.set_cell(unit->get_x_cord(), unit->get_y_cord(),
 						field.get_main_cell(unit->get_x_cord(), unit->get_y_cord()));

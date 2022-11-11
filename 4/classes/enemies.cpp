@@ -11,12 +11,12 @@ void game_objects::Lair::add(const enemy_out &enemy) {
 }
 
 void game_objects::Enemy::regeneration(GE::Game& game) {
-	if (game.counter % specialization->regeneration_speed)
+	if (game.counter % std::max(specialization->regeneration_speed *
+			(100 - game.aura_field[get_x_cord()][get_y_cord()].regeneration) / 100, 1))
 		return;
-	new_max_health = specialization->max_health +
-			game.aura_field[get_x_cord()][get_y_cord()].health;
-	specialization->health = std::min(specialization->health + 1 +
-			game.aura_field[get_x_cord()][get_y_cord()].regeneration, new_max_health);
+	new_max_health = specialization->max_health + specialization->max_health *
+			game.aura_field[get_x_cord()][get_y_cord()].health / 100;
+	specialization->health = std::min(specialization->health + 1, new_max_health);
 }
 
 game_objects::Enemy::Enemy(int x, int y, int type, int shift) :
@@ -24,12 +24,15 @@ game_objects::Enemy::Enemy(int x, int y, int type, int shift) :
 	switch(type) {
 	case (GC::tank_type):
 		specialization = new Tank(x, y, shift);
+		set_symb(GC::tank_symb);
 		break;
 	case (GC::light_type):
 		specialization = new Light(x, y, shift);
+		set_symb(GC::light_symb);
 		break;
 	case (GC::aviation_type):
 		specialization = new Aviation(x, y, shift);
+		set_symb(GC::aviation_symb);
 		break;
 	default:
 		throw std::runtime_error("Нет такого типа");
@@ -80,9 +83,6 @@ void game_objects::Light::fire(GE::Game& game) const {
 	if (bfs(game.get_landscape(), get_x_cord(), get_y_cord(),
 			1, GC::aviation_type, GC::castle_symb, x, y, radius))
 		game.get_castle().get_damage(damage * health / max_health);
-	else if (bfs(game.get_landscape(), get_x_cord(), get_y_cord(),
-			1, GC::aviation_type, GC::wall_symb, x, y, radius))
-		game.get_damage(x, y, damage * health / max_health);
 }
 
 game_objects::Light::Light(int x, int y, int shift) :
@@ -104,9 +104,6 @@ void game_objects::Aviation::fire(GE::Game& game) const {
 	if (bfs(game.get_landscape(), get_x_cord(), get_y_cord(),
 			1, GC::aviation_type, GC::castle_symb, x, y, radius))
 		game.get_castle().get_damage(damage * health / max_health);
-	else if (bfs(game.get_landscape(), get_x_cord(), get_y_cord(),
-			1, GC::aviation_type, GC::wall_symb, x, y, radius))
-		game.get_damage(x, y, damage * health / max_health);
 }
 
 game_objects::Aviation::Aviation(int x, int y, int shift) :
@@ -116,8 +113,7 @@ game_objects::Aviation::Aviation(int x, int y, int shift) :
 
 void game_objects::Lair::Action(GE::Game& game) {
 	if (!enemies.empty()
-			&& static_cast<unsigned long long>(enemies.front().time)
-					<= game.counter) {
+			&& enemies.front().time	<= game.counter) {
 		if (enemies.front().aur == aura{0,0,0})
 			game.add_to_queue(enemies.front().type);
 		else
@@ -139,7 +135,8 @@ void game_objects::HeroEnemy::displace_aura(GE::Game &game) {
 }
 
 void game_objects::Enemy::move(GE::Game &game) {
-	new_speed = std::max(1, specialization->speed -	game.aura_field[get_x_cord()][get_y_cord()].speed);
+	new_speed = std::max(1, specialization->speed - specialization->speed *
+			game.aura_field[get_x_cord()][get_y_cord()].speed / 100);
 	if ((game.counter - specialization->shift) % new_speed)
 		return;
 	int x_old = specialization->get_x_cord();
@@ -190,6 +187,34 @@ void game_objects::HeroEnemy::aura_bfs(GE::Game &game, int type) {
 			way[x_now][y_now + 1] = way[x_now][y_now] + 1;
 		}
 	}
+}
+
+int game_objects::Lair::time_last_enemy() {
+	if (enemies.empty())
+		return (0);
+	return (enemies.back().time);
+}
+
+game_objects::HeroEnemy::HeroEnemy(int x, int y, int type, int shift,
+		aura _hero_aura) :
+		Enemy(x, y, type, shift), hero_aura(_hero_aura) {
+	switch(type) {
+		case (GC::tank_type):
+			set_symb(GC::hero_tank_symb);
+			break;
+		case (GC::light_type):
+			set_symb(GC::hero_light_symb);
+			break;
+		case (GC::aviation_type):
+			set_symb(GC::hero_aviation_symb);
+			break;
+		default:
+			throw std::runtime_error("Нет такого типа");
+		}
+}
+
+double game_objects::Enemy::get_percent_health() const {
+		return (static_cast<double>(specialization->health) / new_max_health);
 }
 /*
  * enemies.cpp
