@@ -58,6 +58,7 @@ namespace game_objects {
 			{regeneration(game), move(game), fire(game);}
 		bool is_alive() const override {return (specialization->is_alive());}
 		double get_percent_health() const override;
+		~Enemy();
 	};
 
 	class HeroEnemy : public Enemy {

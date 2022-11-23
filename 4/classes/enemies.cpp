@@ -11,6 +11,8 @@ void game_objects::Lair::add(const enemy_out &enemy) {
 }
 
 void game_objects::Enemy::regeneration(GE::Game& game) {
+	new_speed = std::max(1, specialization->speed - specialization->speed *
+			game.aura_field[get_x_cord()][get_y_cord()].speed / 100);
 	if (game.counter % std::max(specialization->regeneration_speed *
 			(100 - game.aura_field[get_x_cord()][get_y_cord()].regeneration) / 100, 1))
 		return;
@@ -135,8 +137,6 @@ void game_objects::HeroEnemy::displace_aura(GE::Game &game) {
 }
 
 void game_objects::Enemy::move(GE::Game &game) {
-	new_speed = std::max(1, specialization->speed - specialization->speed *
-			game.aura_field[get_x_cord()][get_y_cord()].speed / 100);
 	if ((game.counter - specialization->shift) % new_speed)
 		return;
 	int x_old = specialization->get_x_cord();
@@ -215,6 +215,10 @@ game_objects::HeroEnemy::HeroEnemy(int x, int y, int type, int shift,
 
 double game_objects::Enemy::get_percent_health() const {
 		return (static_cast<double>(specialization->health) / new_max_health);
+}
+
+game_objects::Enemy::~Enemy() {
+	delete specialization;
 }
 /*
  * enemies.cpp

@@ -13,7 +13,7 @@ void Game::change_landscape(int land_x_size, int land_y_size,
 }
 
 void Game::add_enemy(int type, int time) {
-	lair->add(enemy_out(type, time));
+	lair->add(enemy_out(time, type));
 }
 
 void Game::load_landscape(const std::string &filename) {
@@ -76,7 +76,7 @@ void Game::add_to_queue(int type) {
 }
 
 void Game::add_enemy(int type, const aura &a, int time) {
-	lair->add(enemy_out(type, time, a));
+	lair->add(enemy_out(time, type, a));
 }
 
 void Game::add_to_queue(int type, const aura &a) {
@@ -167,11 +167,11 @@ void game_engine::Game::add_random_enemy() {
 	time = std::max(counter, lair->time_last_enemy()) + time;
 	if (!is_hero) {
 		aur.health = std::rand() % 100;
-		aur.health = (aur.health * aur.health * aur.health) / 1000000;
+		aur.health = (aur.health * aur.health * aur.health) / 10000;
 		aur.regeneration = std::rand() % 100;
-		aur.regeneration = (aur.regeneration * aur.regeneration * aur.regeneration) / 1000000;
+		aur.regeneration = (aur.regeneration * aur.regeneration * aur.regeneration) / 10000;
 		aur.speed = std::rand() % 100;
-		aur.speed = (aur.speed * aur.speed * aur.speed) / 1000000;
+		aur.speed = (aur.speed * aur.speed * aur.speed) / 10000;
 		lair->add(enemy_out(time, type, aur));
 	}
 	else
@@ -213,4 +213,18 @@ void Game::move_unit(int x_from, int y_from, int x_to, int y_to, Unit* unit) {
 		field.set_cell(x_to, y_to, unit->get_symb());
 	units_field[x_to][y_to].push_back(unit);
 
+}
+
+game_engine::Game::~Game() {
+	delete castle;
+	delete lair;
+	for (auto row: units_field)
+		for (auto cell: row)
+			for (auto unit: cell)
+				delete unit;
+
+	for (auto row: towers_field)
+		for (auto unit: row)
+			if (unit)
+				delete unit;
 }

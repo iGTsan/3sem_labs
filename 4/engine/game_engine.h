@@ -54,6 +54,7 @@ namespace game_engine {
 		void show_field();
 		int is_end();
 		void tic();
+		~Game();
 	};
 }
 

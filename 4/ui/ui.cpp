@@ -144,7 +144,6 @@ void sf_my::CheckButton::set_pos(int x, int y) {
 	sprite.setPosition(x, y);
 	text.setPosition(x + size_y * 0.2, y - size_y * 0.2);
 	description.setPosition(x + size_y * 1.2, y);
-//	desc
 }
 
 void sf_my::CheckButton::set_size(int x, int y) {
@@ -263,5 +262,61 @@ void sf_my::Button::resize() {
 	pos_x = pos.x;
 	pos_y = pos.y;
 	std::cout << pos_x << ' ' << pos_y << std::endl;
+}
+
+sf_my::TextField::TextField(int x_pos, int y_pos, int x_size, int y_size) :
+	Button(x_pos, y_pos, x_size, y_size) {}
+
+std::string sf_my::TextField::get_text() {
+	return (text.getString());
+}
+
+int sf_my::TextField::is_clicked(int x, int y) {
+	if (Button::is_clicked(x, y)) {
+		if (!clicked) {
+			clicked = 1;
+			std::string t = text.getString() + '|';
+			text.setString(t);
+		}
+		return (1);
+	}
+	if (clicked) {
+		std::string t = text.getString();
+		t.resize(t.size() -1);
+		text.setString(t);
+		clicked = 0;
+	}
+	return (0);
+}
+
+void sf_my::TextField::button_pressed(sf::Keyboard::Key &key) {
+	if (!clicked)
+		return;
+	if (key >= sf::Keyboard::Key::A && key <= sf::Keyboard::Key::Z) {
+		int shift = 0;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+			shift = 'A' - 'a';
+		std::string t = text.getString();
+		t.resize(t.size() -1);
+		t += ('a' + key - sf::Keyboard::Key::A + shift);
+		t += '|';
+		text.setString(t);
+	}
+	if (key >= sf::Keyboard::Key::Num0 && key <= sf::Keyboard::Key::Num9) {
+		std::string t = text.getString();
+		t.resize(t.size() -1);
+		t += ('0' + key - sf::Keyboard::Key::Num0);
+		t += '|';
+		text.setString(t);
+	}
+	if (key == sf::Keyboard::BackSpace) {
+		std::string t = text.getString();
+		if (t.size() == 1)
+			return;
+		t.resize(t.size() - 2);
+		t += '|';
+		text.setString(t);
+	}
+
 }
 /// саша я тебя люблю

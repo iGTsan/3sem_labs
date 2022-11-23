@@ -1,268 +1,191 @@
+#include "game_engine_ui.h"
 #include "engine_ui.h"
-#include "../classes/consts.h"
-#include "textures.h"
+//#include "textures.h"
 
 using namespace ui_consts;
-namespace GC = game_consts;
 
-void engine_ui::MainWindow::show_field(GE::Game &game) {
-	for (int i = 0; i < game.get_landscape().get_x_size(); i++)
-		for (int j = 0; j < game.get_landscape().get_y_size(); j++) {
-			switch (game.get_landscape().get_main_cell(i, j)) {
-			case (GC::plain_symb):
-				textures::grass_sprite.get_sprite().setPosition(i * cell_size, j * cell_size);
-				window.draw(textures::grass_sprite.get_sprite());
-				break;
-			case (GC::mountain_symb):
-				textures::mountain_sprite.get_sprite().setPosition(i * cell_size, j * cell_size);
-				window.draw(textures::mountain_sprite.get_sprite());
-				break;
-			case (GC::river_symb):
-				textures::river_sprite.get_sprite().setPosition(i * cell_size, j * cell_size);
-				window.draw(textures::river_sprite.get_sprite());
-				break;
-			case (GC::castle_symb):
-				textures::plain_sprite.get_sprite().setPosition(i * cell_size, j * cell_size);
-				window.draw(textures::plain_sprite.get_sprite());
-				textures::castle_sprite.get_sprite().setPosition(i * cell_size, j * cell_size);
-				window.draw(textures::castle_sprite.get_sprite());
-				break;
-			case (GC::lair_symb):
-				textures::lair_sprite.get_sprite().setPosition(i * cell_size, j * cell_size);
-				window.draw(textures::lair_sprite.get_sprite());
-				break;
-			}
-			button_field[i][j].show(window);
+void engine_ui::StartMenu::play(const std::string& player_name, const std::string& level) {
+	window.close();
+//	GE::Game game(player_name);
+//	game.load_landscape(level);
+
+	GE::Game game("ya");
+	game.load_landscape("/home/ya/infa/3 sem/lab/4/levels/field2");
+	// "/home/ya/infa/3 sem/lab/4/levels/field2"
+	game.add_enemy(GC::tank_type, {40, 40, 40}, 1);
+	for (int i = 0; i < 15; i++) {
+		game.add_random_enemy();
+	}
+
+	GameWindow window(game);
+
+	while (window.get_window().isOpen())
+	{
+		sf::Event event;
+		while (window.get_window().pollEvent(event))
+		{
+			window.do_event(game, event);
 		}
+		window.show(game);
+		if (window.is_ready()) {
+			game.tic();
+			game.counter++;
+		}
+
+	}
 }
 
-void engine_ui::MainWindow::show_units(GE::Game &game) {
-	sf::RectangleShape health_back;
-	sf::RectangleShape health_front;
-	health_back.setFillColor(health_back_color);
-	health_back.setSize(sf::Vector2f(cell_size - 2, 4));
-	health_front.setFillColor(sf::Color::Green);
-	for (int i = 0; i < game.get_landscape().get_x_size(); i++)
-		for (int j = 0; j < game.get_landscape().get_y_size(); j++) {
-			auto unit_cell = game.units_field[i][j];
-			auto tower_cell = game.towers_field[i][j];
-			for (auto unit: unit_cell) {
-				switch (unit->get_symb()) {
-				case (GC::tank_symb):
-					textures::tank_sprite.get_sprite().setPosition(i * cell_size, j * cell_size);
-					window.draw(textures::tank_sprite.get_sprite());
-					break;
-				case (GC::light_symb):
-					textures::light_sprite.get_sprite().setPosition(i * cell_size, j * cell_size);
-					window.draw(textures::light_sprite.get_sprite());
-					break;
-				case (GC::aviation_symb):
-					textures::aviation_sprite.get_sprite().setPosition(i * cell_size, j * cell_size);
-					window.draw(textures::aviation_sprite.get_sprite());
-					break;
-				case (GC::hero_tank_symb):
-					textures::hero_tank_sprite.get_sprite().setPosition(i * cell_size, j * cell_size);
-					window.draw(textures::hero_tank_sprite.get_sprite());
-					break;
-				case (GC::hero_light_symb):
-					textures::hero_light_sprite.get_sprite().setPosition(i * cell_size, j * cell_size);
-					window.draw(textures::hero_light_sprite.get_sprite());
-					break;
-				case (GC::hero_aviation_symb):
-					textures::hero_aviation_sprite.get_sprite().setPosition(i * cell_size, j * cell_size);
-					window.draw(textures::hero_aviation_sprite.get_sprite());
-					break;
-				case (GC::wall_symb):
-					textures::wall_sprite.get_sprite().setPosition(i * cell_size, j * cell_size);
-					window.draw(textures::wall_sprite.get_sprite());
-					break;
-				}
-				if (unit->get_percent_health() != 1) {
-					health_front.setSize(sf::Vector2f((cell_size - 2) * unit->get_percent_health(), 4));
-					health_front.setPosition(i * cell_size + 1, (j + 1) * cell_size - 1);
-					health_back.setPosition(health_front.getPosition());
-					window.draw(health_back);
-					window.draw(health_front);
-				}
-			}
-			if (tower_cell != nullptr) {
-				textures::tower_sprite.get_sprite().setPosition(i * cell_size, j * cell_size);
-				window.draw(textures::tower_sprite.get_sprite());
-			}
-		}
-	sf::Text end;
-	end.setFont(textures::beauty_font);
-	end.setPosition(10, old_size_y / 2);
-	end.setFillColor(sf::Color::Red);
-	end.setCharacterSize(cell_size * 3);
-	if (game.is_end() == 1)
-		end.setString("You win");
-	if (game.is_end() == -1)
-		end.setString("You lose");
-	window.draw(end);
-}
-
-engine_ui::MainWindow::MainWindow(GE::Game &game) :
-		counter(0), max_counter(speed2) {
-	textures::init();
-	size_x = game.get_landscape().get_x_size() * cell_size + menu_size + 4;
-	size_y = game.get_landscape().get_y_size() * cell_size + stat_size * 3 + 2;
+engine_ui::StartMenu::StartMenu() {
+	size_x = start_menu_width;
+	size_y = start_menu_height;
 	old_size_x = size_x;
 	old_size_y = size_y;
-	window.create(sf::VideoMode(size_x, size_y), "SFML works!");
+	window.create(sf::VideoMode(size_x, size_y), "Menu");
 	window.setVerticalSyncEnabled(true);
 	window.setFramerateLimit(frametime);
 	size_x = old_size_x;
 	size_y = old_size_y;
 
-	castle_health.setCharacterSize(stat_size);
-	castle_health.setPosition(sf::Vector2f(10, game.get_landscape().get_y_size() * cell_size ));
-	castle_health.setFont(textures::beauty_font);
-	balance.setCharacterSize(stat_size);
-	balance.setPosition(sf::Vector2f(10, game.get_landscape().get_y_size() * cell_size + stat_size));
-	balance.setFont(textures::beauty_font);
-	info.setCharacterSize(stat_size);
-	info.setPosition(sf::Vector2f(10, game.get_landscape().get_y_size() * cell_size + stat_size * 2));
-	info.setFont(textures::beauty_font);
-	info.setFillColor(sf::Color::Red);
+	buttons.push_back(new sf_my::Button((size_x - menu_size) / 2,
+			size_y / 2 - stat_size * 1.7, menu_size, stat_size, button_start_game));
+	buttons[0]->set_text("Start game");
+	buttons.push_back(new sf_my::Button((size_x - menu_size) / 2,
+			(size_y - stat_size) / 2, menu_size, stat_size, button_level_editor));
+	buttons[1]->set_text("Level editor");
+	buttons.push_back(new sf_my::Button((size_x - menu_size) / 2,
+			size_y / 2 + stat_size * 0.7, menu_size, stat_size, button_exit));
+	buttons[2]->set_text("Exit");
 
-//	castle_menu.set_shift(game.get_landscape().get_x_size() * cell_size + 2);
-//	castle_menu.set_size(menu_size);
-//	tower_menu.set_shift(game.get_landscape().get_x_size() * cell_size + 2);
-//	tower_menu.set_size(menu_size);
-	field_menu.set_shift(game.get_landscape().get_x_size() * cell_size + 2);
-	field_menu.set_size(menu_size);
+	next.set_size(menu_size, stat_size);
+	next.set_pos((size_x - menu_size) / 2 + menu_size + stat_size, (size_y - stat_size) / 2);
+	next.set_text("Next");
 
-	button_field.resize(game.get_landscape().get_x_size());
-	for (int i = 0; i < static_cast<int>(button_field.size()); i++) {
-		button_field[i].resize(game.get_landscape().get_y_size());
-		for (int j = 0; j < static_cast<int>(button_field[i].size()); j++) {
-			button_field[i][j].set_size(cell_size, cell_size);
-			button_field[i][j].set_pos(i * cell_size, j * cell_size);
-			button_field[i][j].set_back_color(sf::Color::Transparent);
-			button_field[i][j].set_outline_color(sf::Color::Transparent);
-		}
-	}
-
-	speed.add_button(button_speed1, "Speed 1");
-	speed.add_button(button_speed2, "Speed 2");
-	speed.add_button(button_speed3, "Speed 3");
-	speed.set_pos(game.get_landscape().get_x_size() * cell_size + 5,
-			game.get_landscape().get_y_size() * cell_size - stat_size);
-	speed.set_size(menu_size, stat_size);
+	name.set_pos((size_x - menu_size) / 2, size_y / 2 - stat_size * 1.2);
+	name.set_size(menu_size, stat_size);
+	name_text.setPosition((size_x - menu_size) / 2 - menu_size, size_y / 2 - stat_size * 1.2);
+	name_text.setFont(fonts.beauty_font);
+	name_text.setFillColor(font_color);
+	name_text.setCharacterSize(stat_size);
+	name_text.setString("Your name:");
+	level.set_pos((size_x - menu_size) / 2, size_y / 2 + stat_size * 0.2);
+	level.set_size(menu_size, stat_size);
+	level_text.setPosition((size_x - menu_size) / 2 - menu_size, size_y / 2 + stat_size * 0.2);
+	level_text.setFont(fonts.beauty_font);
+	level_text.setFillColor(font_color);
+	level_text.setCharacterSize(stat_size);
+	level_text.setString("Level:");
 }
 
-void engine_ui::MainWindow::show_stats(GE::Game &game) {
-	castle_health.setString(UC::castle_health + std::to_string(game.get_castle().get_health()));
-	balance.setString(UC::balance + std::to_string(game.balance));
-	window.draw(castle_health);
-	window.draw(balance);
-	window.draw(info);
-}
-
-void engine_ui::MainWindow::show_menu(GE::Game &game) {
-	if (menu)
-		menu->show(window);
-	speed.show(window);
-}
-
-void engine_ui::MainWindow::do_event(GE::Game &game, sf::Event &event) {
+void engine_ui::StartMenu::do_event(sf::Event &event) {
 	if (event.type == sf::Event::Closed)
 		window.close();
 	if (event.type == sf::Event::MouseButtonPressed)
-		mouse_pressed(game, event);
+		mouse_pressed(event);
 	if (event.type == sf::Event::MouseMoved)
-		mouse_moved(game, event);
+		mouse_moved(event);
 	if (event.type == sf::Event::Resized)
 		resized(event);
-
+	if (event.type == sf::Event::KeyPressed)
+		key_pressed(event);
 }
 
-void engine_ui::MainWindow::mouse_pressed(GE::Game &game, sf::Event& event) {
-	int x = event.mouseButton.x * old_size_x / size_x;
-	int y = event.mouseButton.y * old_size_y / size_y;
-	for (int i = 0; i < static_cast<int>(button_field.size()); i++)
-		for (int j = 0; j < static_cast<int>(button_field[i].size()); j++)
-			if (button_field[i][j].is_clicked(x, y)) {
-				menu = &field_menu;
-				menu->set_pos(i, j);
-			}
-	if (menu)
-		try {
-		switch (menu->is_clicked(x, y)) {
-		case UC::button_level_up_castle:
-			game.castle_level_up();
-			break;
-		case UC::button_level_up_tower:
-			game.tower_level_up(menu->get_x_pos(), menu->get_y_pos());
-			break;
-		case UC::button_place_tower:
-			game.add_tower(menu->get_x_pos(), menu->get_y_pos());
-			break;
-		case UC::button_place_wall:
-			game.add_wall(menu->get_x_pos(), menu->get_y_pos());
-			break;
-		case UC::button_repair_wall:
-			game.repair_wall(menu->get_x_pos(), menu->get_y_pos());
-			break;
-		}} catch (std::runtime_error& e) {
-			info.setString(e.what());
-			}
-	switch (speed.is_clicked(x, y)) {
-	case (button_speed1):
-		max_counter = speed1;
-		break;
-	case (button_speed2):
-		max_counter = speed2;
-		break;
-	case (button_speed3):
-		max_counter = speed3;
-		break;
+void engine_ui::StartMenu::loop() {
+	while (window.isOpen()) {
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			do_event(event);
+		}
+		show();
 	}
 }
 
-void engine_ui::MainWindow::mouse_moved(GE::Game &game, sf::Event &event) {
+void engine_ui::StartMenu::show() {
+	window.clear(background_color);
+	switch (state) {
+	case 0:
+		for (auto button: buttons)
+			button->show(window);
+		break;
+	case 1:
+		name.show(window);
+		level.show(window);
+		next.show(window);
+		window.draw(name_text);
+		window.draw(level_text);
+		break;
+	case 2:
+		level.show(window);
+		next.show(window);
+		window.draw(level_text);
+		break;
+	}
+	window.display();
+}
+
+void engine_ui::StartMenu::mouse_moved(sf::Event &event) {
 	int x = event.mouseMove.x * old_size_x / size_x;
 	int y = event.mouseMove.y * old_size_y / size_y;
-	for (int i = 0; i < static_cast<int>(button_field.size()); i++)
-		for (int j = 0; j < static_cast<int>(button_field[i].size()); j++)
-			button_field[i][j].is_active(x, y);
-	if (menu)
-		menu->is_active(x, y);
-	speed.is_active(x, y);
+	switch (state) {
+	case 0:
+		for (auto button: buttons)
+			button->is_active(x, y);
+		break;
+	case 1:
+		name.is_active(x, y);
+		level.is_active(x, y);
+		next.is_active(x, y);
+		break;
+	case 2:
+		level.is_active(x, y);
+		next.is_active(x, y);
+		break;
+	}
 }
 
-engine_ui::FieldMenu::FieldMenu(int x_shift, int x_pos, int y_pos, int size) :
-	MenuPart(x_shift, x_pos, y_pos, size) {
-	;
-	buttons.push_back(new sf_my::Button(x_shift, 1, size, stat_size - 1, button_place_tower));
-	buttons[0]->set_text("Buy tower");
-	buttons.push_back(new sf_my::Button(x_shift, stat_size, size, stat_size - 1, button_level_up_tower));
-	buttons[1]->set_text("Tower level up");
-	buttons.push_back(new sf_my::Button(x_shift, stat_size * 2, size, stat_size - 1, button_place_wall));
-	buttons[2]->set_text("Buy wall");
-	buttons.push_back(new sf_my::Button(x_shift, stat_size * 3, size, stat_size - 1, button_repair_wall));
-	buttons[3]->set_text("Repair wall");
-	buttons.push_back(new sf_my::Button(x_shift, stat_size * 4, size, stat_size - 1, button_level_up_castle));
-	buttons[4]->set_text("Castle level up");
+void engine_ui::StartMenu::mouse_pressed(sf::Event &event) {
+	int x = event.mouseButton.x * old_size_x / size_x;
+	int y = event.mouseButton.y * old_size_y / size_y;
+	switch (state) {
+	case 0:
+		for (auto button: buttons)
+			switch (button->is_clicked(x, y)) {
+			case button_start_game:
+				state = 1;
+				break;
+			case button_level_editor:
+				state = 2;
+				break;
+			case button_exit:
+				window.close();
+				return;
+			}
+		break;
+	case 1:
+		name.is_clicked(x, y);
+		level.is_clicked(x, y);
+		if (next.is_clicked(x, y))
+			play(name.get_text(), level.get_text());
+		break;
+	case 2:
+		level.is_clicked(x, y);
+		break;
+	}
 }
 
-void engine_ui::MainWindow::resized(sf::Event& event) {
+void engine_ui::StartMenu::resized(sf::Event &event) {
 	size_x = event.size.width;
 	size_y = event.size.height;
-	std::cout << size_x << ' ' << size_y << std::endl;
-	std::cout << old_size_x << ' ' << old_size_y << std::endl;
 }
 
-bool engine_ui::MainWindow::is_ready() {
-	if (counter >= max_counter) {
-		counter = 0;
-		return (1);
+void engine_ui::StartMenu::key_pressed(sf::Event &event) {
+	if (state != 0) {
+		name.button_pressed(event.key.code);
+		level.button_pressed(event.key.code);
 	}
-	counter++;
-	return (0);
 }
 
-
-
-
+engine_ui::StartMenu::~StartMenu() {
+	for (auto button: buttons)
+		delete button;
+}

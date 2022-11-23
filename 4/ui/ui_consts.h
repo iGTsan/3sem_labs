@@ -9,11 +9,18 @@ namespace ui_consts {
 	constexpr int stat_size = 30;
 	constexpr int fields_max_len = 100;
 
+	constexpr int start_menu_width = 640;
+	constexpr int start_menu_height = 480;
+
 	constexpr int button_place_tower = 1;
 	constexpr int button_place_wall = 2;
 	constexpr int button_level_up_tower = 3;
 	constexpr int button_level_up_castle = 4;
 	constexpr int button_repair_wall = 5;
+
+	constexpr int button_start_game = 1;
+	constexpr int button_level_editor = 2;
+	constexpr int button_exit = 3;
 
 	constexpr int button_speed1 = 1;
 	constexpr int button_speed2 = 2;

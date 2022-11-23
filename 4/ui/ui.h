@@ -36,7 +36,7 @@ namespace sf_my {
 
 	class CheckButton : public Button {
 	protected:
-		int checked;
+		int checked = 0;
 		sf::Font check_font;
 	private:
 		sf::Text description;
@@ -111,6 +111,16 @@ namespace sf_my {
 	public:
 		Sprite(const std::string &filename);
 		sf::Sprite& get_sprite() {return (sprite);}
+	};
+
+	class TextField : public Button {
+	private:
+		int clicked = 0;
+	public:
+		TextField(int x_pos=0, int y_pos=0, int x_size=0, int y_size=0);
+		std::string get_text();
+		int is_clicked(int x, int y) override;
+		void button_pressed(sf::Keyboard::Key &key);
 	};
 }
 
