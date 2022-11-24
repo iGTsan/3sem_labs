@@ -155,7 +155,7 @@ void game_objects::Enemy::fire(GE::Game &game) const {
 
 void game_objects::HeroEnemy::aura_bfs(GE::Game &game, int type) {
 	std::deque<std::pair<int, int>> q;
-	std::vector<std::vector<int>> way(game.get_landscape().get_x_size());
+	std::MyVector<std::MyVector<int>> way(game.get_landscape().get_x_size());
 	for (auto &i: way)
 		i.resize(game.get_landscape().get_y_size(), -1);
 	q.push_back(std::make_pair(get_x_cord(), get_y_cord()));

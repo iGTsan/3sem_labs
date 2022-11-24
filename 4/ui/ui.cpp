@@ -89,7 +89,7 @@ void sf_my::MenuPart::set_pos(int x, int y) {
 
 void sf_my::MenuPart::set_shift(int x) {
 	x_shift = x;
-	for (auto button: buttons)
+	for (auto& button: buttons)
 		button->set_pos(x, button->get_y_pos());
 }
 

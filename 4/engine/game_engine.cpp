@@ -4,7 +4,7 @@ using namespace game_objects;
 using namespace game_engine;
 
 void Game::change_landscape(int land_x_size, int land_y_size,
-		const std::vector<std::string> *_field) {
+		const std::MyVector<std::string> *_field) {
 	Landscape new_field(land_x_size, land_y_size, _field);
 	if (!new_field.check())
 		throw std::runtime_error("Отсутствует логово, замок или путь от логова до замка");

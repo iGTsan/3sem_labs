@@ -5,7 +5,7 @@
 #include "../classes/basic.h"
 #include "../classes/enemies.h"
 #include "../classes/player_things.h"
-#include <vector>
+//#include <vector>
 #include <deque>
 #include <cstdlib>
 #include <ctime>
@@ -27,14 +27,14 @@ namespace game_engine {
 		void set_cords();
 		int enemy_cnt = 0;
 	public:
-		std::vector<std::vector<std::vector<GO::Unit*>>> units_field;
-		std::vector<std::vector<GO::Tower*>> towers_field;
-		std::vector<std::vector<GO::aura>> aura_field;
+		std::MyVector<std::MyVector<std::MyVector<GO::Unit*>>> units_field;
+		std::MyVector<std::MyVector<GO::Tower*>> towers_field;
+		std::MyVector<std::MyVector<GO::aura>> aura_field;
 		int counter = 0;
 		int balance = 0;
 		Game(const std::string& _player_name) : player_name(_player_name) {std::srand(std::clock());}
 		void change_landscape(int land_x_size, int land_y_size,
-				const std::vector<std::string>* _field = nullptr);
+				const std::MyVector<std::string>* _field = nullptr);
 		void load_landscape(const std::string& filename);
 		void save_landscape(const std::string& filename);
 		void move_unit(int x_from, int y_from, int x_to, int y_to, GO::Unit* unit);

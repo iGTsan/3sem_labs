@@ -8,7 +8,7 @@
 using std::get;
 
 game_objects::Landscape::Landscape(int _x_size, int _y_size,
-		const std::vector<std::string> *_field) : x_size(0), y_size(0) {
+		const std::MyVector<std::string> *_field) : x_size(0), y_size(0) {
 	if (_field == nullptr)
 		return;
 	if (static_cast<int>(_field->size()) != _x_size)
@@ -167,7 +167,7 @@ bool is_enemy(char symb) {
 bool game_objects::bfs(const Landscape &land, int x_from, int y_from, int type,
 		int way_type, char to_find, int &x, int &y, int radius) {
 	std::deque<std::pair<int, int>> q;
-	std::vector<std::vector<std::tuple<int, int, int>>> way(land.x_size);
+	std::MyVector<std::MyVector<std::tuple<int, int, int>>> way(land.x_size);
 	for (auto &i: way)
 		i.resize(land.y_size, std::make_tuple(-1, -1, -1));
 	q.push_back(std::make_pair(x_from, y_from));

@@ -12,9 +12,11 @@
 #include "additional_classes.h"
 #include "../engine/game_engine_prot.h"
 #include <iostream>
-#include <vector>
+//#include <vector>
 #include <deque>
-#include <memory>
+#include "vector.h"
+
+//#define MyVector MyVector
 
 namespace GC = game_consts;
 namespace GE = game_engine;
@@ -55,13 +57,13 @@ namespace game_objects {
 	 */
 	class Landscape {
 	private:
-		std::vector<std::string> field;
-		std::vector<std::string> field_w_units;
+		std::MyVector<std::string> field;
+		std::MyVector<std::string> field_w_units;
 		int x_size;
 		int y_size;
 	public:
 		Landscape(int _x_size=0, int _y_size=0,
-				const std::vector<std::string>* _field = nullptr);
+				const std::MyVector<std::string>* _field = nullptr);
 		int get_x_size() const {return (x_size);};
 		int get_y_size() const {return (y_size);};
 		void set_size(int _x_size, int _y_size);
