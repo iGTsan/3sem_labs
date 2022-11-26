@@ -1,7 +1,11 @@
+/** \file
+ * \brief Файл с моей реализацие STL контейнера vector
+ */
+
 #ifndef CLASSES_VECTOR_H_
 #define CLASSES_VECTOR_H_
+
 #include <cstddef>
-//#include <>
 
 namespace std {
 	template <typename T>
@@ -9,7 +13,7 @@ namespace std {
 	private:
 		T* data;
 	public:
-		MyVectorIt(T* data) : data(data) {}
+		MyVectorIt(T* data = nullptr) : data(data) {}
 		bool operator !=(const MyVectorIt<T>& other) const;
 		bool operator ==(const MyVectorIt<T>& other) const;
 		MyVectorIt<T> operator ++(int);

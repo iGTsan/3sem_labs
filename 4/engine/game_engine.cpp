@@ -30,7 +30,7 @@ void Game::load_landscape(const std::string &filename) {
 		v.resize(field.get_y_size(), {0,0,0});
 }
 
-void Game::save_landscape(const std::string &filename) {
+void Game::save_landscape(const std::string &filename) const {
 	field.save(filename);
 }
 
@@ -47,13 +47,13 @@ void Game::set_cords() {
 	units_queue.push_back(nullptr);
 }
 
-void Game::show_field() {
+void Game::show_field() const {
 	field.show(std::cout);
 	std::cout << "Здоровье замка: " << castle->get_health() <<
 			" Деньги: "  << balance << " Время: " << counter << std::endl;
 }
 
-int Game::is_end() {
+int Game::is_end() const {
 	if (!castle->is_alive())
 		return (-1);
 	if (lair->time_last_enemy() == 0) {

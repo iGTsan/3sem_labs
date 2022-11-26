@@ -1,3 +1,7 @@
+/** \file
+ * \brief Файл со всеми игровыми константами
+ */
+
 #ifndef CLASSES_CONSTS_H_
 #define CLASSES_CONSTS_H_
 
@@ -5,8 +9,8 @@
 
 namespace GO = game_objects;
 
+/// Пространство имен игровых констант
 namespace game_consts {
-
 	constexpr int tank_max_health = 30;
 	constexpr int light_max_health = 15;
 	constexpr int aviation_max_health = 20;

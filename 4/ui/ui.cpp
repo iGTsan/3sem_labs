@@ -67,7 +67,7 @@ int sf_my::Button::is_active(int x, int y) {
 	return (0);
 }
 
-void sf_my::Button::show(sf::RenderWindow &window) {
+void sf_my::Button::show(sf::RenderWindow &window) const {
 	window.draw(sprite);
 	window.draw(text);
 }
@@ -93,7 +93,7 @@ void sf_my::MenuPart::set_shift(int x) {
 		button->set_pos(x, button->get_y_pos());
 }
 
-void sf_my::MenuPart::show(sf::RenderWindow &window) {
+void sf_my::MenuPart::show(sf::RenderWindow &window) const {
 	window.draw(chosen);
 	for (auto& button: buttons)
 		button->show(window);
@@ -159,7 +159,7 @@ void sf_my::CheckButton::set_desc(const std::string &desc) {
 	description.setString(desc);
 }
 
-void sf_my::CheckButton::show(sf::RenderWindow &window) {
+void sf_my::CheckButton::show(sf::RenderWindow &window) const {
 	window.draw(sprite);
 	window.draw(description);
 	if (checked)
@@ -205,7 +205,7 @@ void sf_my::CheckButtons::add_button(int return_code, const std::string &desc) {
 			size_x, size_y, return_code, desc));
 }
 
-void sf_my::CheckButtons::show(sf::RenderWindow &window) {
+void sf_my::CheckButtons::show(sf::RenderWindow &window) const {
 	for (auto button: buttons)
 		button->show(window);
 }
@@ -267,7 +267,7 @@ void sf_my::Button::resize() {
 sf_my::TextField::TextField(int x_pos, int y_pos, int x_size, int y_size) :
 	Button(x_pos, y_pos, x_size, y_size) {}
 
-std::string sf_my::TextField::get_text() {
+std::string sf_my::TextField::get_text() const {
 	return (text.getString());
 }
 

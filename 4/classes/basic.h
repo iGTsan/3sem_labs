@@ -1,9 +1,7 @@
-/*
- * basic.h
- *
- *  Created on: 5 нояб. 2022 г.
- *      Author: ya
- */
+/**
+* \file
+* \brief Файл с объявлением основных классов
+*/
 
 #ifndef CLASSES_BASIC_H_
 #define CLASSES_BASIC_H_
@@ -12,19 +10,18 @@
 #include "additional_classes.h"
 #include "../engine/game_engine_prot.h"
 #include <iostream>
-//#include <vector>
 #include <deque>
 #include "vector.h"
-
-//#define MyVector MyVector
 
 namespace GC = game_consts;
 namespace GE = game_engine;
 
+/// Пространство имен с классами игровых объектов
 namespace game_objects {
-//	class Game;
-//	class
-
+	/// Класс "Ячейка игрового поля"
+	/**
+	 * Имеет координаты и символ соответсвующий типу ячейки.
+	 */
 	class Cell {
 	protected:
 		int x;
@@ -40,7 +37,11 @@ namespace game_objects {
 		void set_symb(char c) {symb = c;};
 		virtual ~Cell() {};
 	};
-
+	/// Класс "Действующее лицо"
+	/**
+	 * Потомок Cell.
+	 * Интерфейс для всех действующих лиц игры.
+	 */
 	class Unit : public Cell {
 	public:
 		Unit(int x, int y, char symb) :
@@ -50,15 +51,14 @@ namespace game_objects {
 		virtual void get_damage(int damage) = 0;
 		virtual double get_percent_health() const = 0;
 	};
+	/// Класс "Ландшафт"
 	/**
-	 *	\brief Класс ландшафт
-	 *
-	 *	Описывает игровое поле(расположение врагов, башен, замка и т. д.)
+	 *	Описывает игровое поле(расположение врагов, башен, замка и т. д.).
 	 */
 	class Landscape {
 	private:
-		std::MyVector<std::string> field;
-		std::MyVector<std::string> field_w_units;
+		std::MyVector<std::string> field; ///< Основное поле \details Только равнины, горы, реки, замок и логово.
+		std::MyVector<std::string> field_w_units; ///< Поле со всеми действующими лицами
 		int x_size;
 		int y_size;
 	public:
@@ -71,7 +71,7 @@ namespace game_objects {
 		char get_cell(int x, int y) const;
 		void set_cell(int x, int y, char symb);
 		void set_main_cell(int x, int y, char symb);
-		bool check() const;
+		bool check() const; ///< Проверка текущего поля на корректность \details Проверка на существование замка, логова и пути между ними
 		void load(const std::string& filename);
 		std::ostream& show(std::ostream&) const;
 		void save(const std::string& filename) const;
@@ -80,11 +80,19 @@ namespace game_objects {
 				int type, int way_type, char to_find, int &x, int &y, int radius);
 	};
 
+	/** \brief Поиск кратчайшего пути между чем угодно
+	 * \param [in] land поле, на котором ищется путь
+	 * \param [in] x_from начальная координата x
+	 * \param [in] y_from начальная координата y
+	 * \param [in] type тип возвращаемого значения (1 - найденная клетка, 2 - соседняя клетка на пути к найденной)
+	 * \param [in] way_type тип пути (легкая пехота, танк или авиация)
+	 * \param [in] to_find клетка, которую нужно найти
+	 * \param [out] x возвращаемая координата x
+	 * \param [out] y возвращаемая координата y
+	 * \param [in] radius радиус поиска
+	 */
 	bool bfs(const Landscape& land, int x_from, int y_from,
 			int type, int way_type, char to_find, int &x, int &y, int radius = -1);
-
 }
 
-
-
-#endif /* CLASSES_BASIC_H_ */
+#endif

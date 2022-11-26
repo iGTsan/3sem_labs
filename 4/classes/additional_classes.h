@@ -1,7 +1,17 @@
+/**
+* \file
+* \brief Файл с дополнительными структурами, импользуемыми игровыми классами
+*/
+
 #ifndef CLASSES_ADDITIONAL_CLASSES_H_
 #define CLASSES_ADDITIONAL_CLASSES_H_
 
 namespace game_objects {
+	/// Строка таблицы характеристик башни
+	/**
+	 * Включает в себя время перезарядки, стоимость уровня,
+	 * радиус действия башни и наносимый на уровне урон.
+	 */
 	typedef struct tower_chars {
 		const int recoil;
 		const int cost;
@@ -9,6 +19,11 @@ namespace game_objects {
 		const int damage;
 	} tower_chars;
 
+	/// Строка таблицы характеристик замка
+	/**
+	 * Включает в себя время доходность, стоимость уровня,
+	 * максимальное здоровье и время восстановления единицы здоровья.
+	 */
 	typedef struct  castle_chars {
 		const int profit;
 		const int cost;
@@ -16,17 +31,21 @@ namespace game_objects {
 		const int repair_speed;
 	} castle_chars;
 
+	// Геройская аура
+	/**
+	 * Используется для облегчения работы с полем аур.
+	 */
 	typedef struct aura {
 		int health = 0;
 		int speed = 0;
 		int regeneration = 0;
-		struct aura& operator +=(aura& other) {
+		struct aura& operator +=(const aura& other) {
 			health += other.health;
 			speed += other.speed;
 			regeneration += other.regeneration;
 			return (*this);
 		}
-		struct aura& operator -=(aura& other) {
+		struct aura& operator -=(const aura& other) {
 			health -= other.health;
 			speed -= other.speed;
 			regeneration -= other.regeneration;
@@ -43,7 +62,7 @@ namespace game_objects {
 		}
 	} aura;
 
-
+	/// Запись о том, когда и какой враг должен выйти
 	typedef struct enemy_out {
 		const int time;
 		const int type;

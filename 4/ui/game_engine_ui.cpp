@@ -1,6 +1,4 @@
 #include "game_engine_ui.h"
-//#include "../classes/consts.h"
-//#include "textures.h"
 
 using namespace ui_consts;
 namespace GC = game_consts;
@@ -245,8 +243,6 @@ engine_ui::FieldMenu::FieldMenu(int x_shift, int x_pos, int y_pos, int size) :
 void engine_ui::GameWindow::resized(sf::Event& event) {
 	size_x = event.size.width;
 	size_y = event.size.height;
-	std::cout << size_x << ' ' << size_y << std::endl;
-	std::cout << old_size_x << ' ' << old_size_y << std::endl;
 }
 
 bool engine_ui::GameWindow::is_ready() {

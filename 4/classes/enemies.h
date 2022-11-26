@@ -1,8 +1,5 @@
-/*
- * enemies.h
- *
- *  Created on: 5 нояб. 2022 г.
- *      Author: ya
+/** \file
+ * \brief Файл с классами врагов и логова
  */
 
 #ifndef CLASSES_ENEMIES_H_
@@ -13,9 +10,7 @@
 #include <deque>
 
 namespace game_objects {
-	/**
-	 *  \brief Класс враг
-	 */
+	/// Класс, описывающий пециализацию врага
 	class EnemySpecialization : public Cell {
 	protected:
 		std::string name;
@@ -29,7 +24,6 @@ namespace game_objects {
 		const int shift;
 		virtual void move(GE::Game&) = 0;
 		virtual void fire(GE::Game&) const = 0;
-
 	public:
 		EnemySpecialization(int x, int y, int _max_health,
 				int _regeneration_speed, int _speed,
@@ -42,6 +36,7 @@ namespace game_objects {
 		friend class HeroEnemy;
 	};
 
+	/// Класс описывающий врага
 	class Enemy : public Unit {
 	protected:
 		EnemySpecialization *specialization;
@@ -54,6 +49,10 @@ namespace game_objects {
 	public:
 		Enemy(int x, int y, int type, int shift);
 		void get_damage(int damage) override {specialization->health -= damage, std::cout << specialization->health << " Здоровья осталось" << std::endl;};
+		/// Функция совершающая действие
+		/**
+		 * Сначала регенерация, потом движение, потом стрельба.
+		 */
 		virtual void Action(GE::Game& game) override
 			{regeneration(game), move(game), fire(game);}
 		bool is_alive() const override {return (specialization->is_alive());}
@@ -61,21 +60,32 @@ namespace game_objects {
 		~Enemy();
 	};
 
+	/// Класс описывающий врага-героя
 	class HeroEnemy : public Enemy {
 	private:
 		aura hero_aura;
 		int aura_placed = 0;
 		void place_aura(GE::Game& game);
 		void displace_aura(GE::Game& game);
-		void aura_bfs(GE::Game& game, int type);
+		void aura_bfs(GE::Game& game, int type) const;
 	public:
 		HeroEnemy(int x, int y, int type, int shift, aura _hero_aura);
+		/// Функция совершающая действие
+		/**
+		 * Сначала регенерация, потом снятие ауры,
+		 * затем движение, установка ауры в новом месте
+		 * и потом стрельба.
+		 */
 		void Action(GE::Game& game) override
 			{regeneration(game), displace_aura(game),
 			move(game), place_aura(game), fire(game);}
 
 	};
 
+	/// Тип врага - танк
+	/**
+	 * Может атаковать стены и перемещатся по равнине.
+	 */
 	class Tank : EnemySpecialization {
 		friend class Enemy;
 	protected:
@@ -85,6 +95,11 @@ namespace game_objects {
 		Tank(int x, int y, int shift);
 	};
 
+	/// Тип врага - легкая пехота
+	/**
+	 * Не может атаковать стены
+	 * перемещается по равнине
+	 */
 	class Light : EnemySpecialization {
 		friend class Enemy;
 	protected:
@@ -94,6 +109,11 @@ namespace game_objects {
 		Light(int x, int y, int shift);
 	};
 
+	/// Тип врага - авиация
+	/**
+	 * Не может атаковать стены
+	 * перемещатся над равниной и реками.
+	 */
 	class Aviation : EnemySpecialization {
 		friend class Enemy;
 	protected:
@@ -103,22 +123,23 @@ namespace game_objects {
 		Aviation(int x, int y, int shift);
 	};
 
-	/**
-	 *  \brief Класс логово
+	/// Класс логово врагов
+	/*
+	 * Хранит очередь выхода врагов
+	 * и может выпускать их в нужное время.
 	 */
-
 	class Lair : public Unit {
 		private:
 			std::deque<enemy_out> enemies;
 		public:
 			void get_damage(int damage) override {};
 			Lair(int x=0, int y=0);
-			void Action(GE::Game&) override;
-			void add(const enemy_out &enemy);
-			bool is_alive() const {return (1);}
-			int time_last_enemy();
+			void Action(GE::Game&) override; ///< Выпустить врага, если подошло его время
+			void add(const enemy_out &enemy); ///< Добавить врага в очередь
+			bool is_alive() const override {return (1);}
+			int time_last_enemy() const; ///< Время выхода последнего врага в очереди
 			double get_percent_health() const override {return (1);}
 		};
 }
 
-#endif /* CLASSES_ENEMIES_H_ */
+#endif

@@ -1,3 +1,7 @@
+/** \file
+ *  \brief файл с классами построек игрока
+ */
+
 #ifndef CLASSES_PLAYER_THINGS_H_
 #define CLASSES_PLAYER_THINGS_H_
 
@@ -7,12 +11,9 @@
 
 namespace GC = game_consts;
 
-
 namespace game_objects {
 
-	/**
-	 *  \brief Класс защитная стена
-	 */
+	//// Класс защитная стена
 	class Wall : public Unit {
 	private:
 		static const int max_health = GC::wall_max_health;
@@ -27,9 +28,8 @@ namespace game_objects {
 		void Action(GE::Game &) override {};
 		double get_percent_health() const override;
 	};
-	/**
-	 *  \brief Класс защитная башня
-	 */
+
+	/// Класс защитная башня
 	class Tower : public Unit {
 	private:
 		const int id = 0;
@@ -48,9 +48,7 @@ namespace game_objects {
 		double get_percent_health() const override {return (1);}
 	};
 
-	/**
-	 *  \brief Класс замок
-	 */
+	/// Класс замок
 	class Castle : public Wall, Tower {
 	private:
 		const static int max_level = GC::castle_max_level;
@@ -59,11 +57,10 @@ namespace game_objects {
 	public:
 		Castle() : Wall(0, 0), Tower(0, 0) {};
 		Castle(int x, int y, const std::string& _name, int _level=0);
-		void set(int x, int y, const std::string& _name, int _level=0);
 		int get_health() {return (health);}
-		void Action(GE::Game&) override;
-		void get_damage(int damage) {Wall::get_damage(damage);};
-		bool is_alive() const {return (Wall::is_alive());}
+		void Action(GE::Game&) override; ///< Регенерация и генерация монет
+		void get_damage(int damage) override {Wall::get_damage(damage);};
+		bool is_alive() const override {return (Wall::is_alive());}
 		void level_up(GE::Game&) override;
 		double get_percent_health() const override {return (Wall::get_percent_health());}
 	};

@@ -1,6 +1,4 @@
 #include "basic.h"
-#include "enemies.h"
-#include "player_things.h"
 #include <stdexcept>
 #include <fstream>
 #include <tuple>
@@ -12,10 +10,10 @@ game_objects::Landscape::Landscape(int _x_size, int _y_size,
 	if (_field == nullptr)
 		return;
 	if (static_cast<int>(_field->size()) != _x_size)
-		throw std::length_error("Несовпадение размеров по Х");
+		throw std::length_error("Wrong X size");
 	for (auto s: *_field) {
 		if (static_cast<int>(s.size()) != _y_size)
-			throw std::length_error("Несовпадение размеров по Y");
+			throw std::length_error("Wrong Y size");
 	}
 	x_size = _x_size;
 	y_size = _y_size;
@@ -63,27 +61,29 @@ void game_objects::Landscape::load(const std::string &filename) {
 	std::ifstream fin;
 	fin.open(filename);
 	if (!fin.is_open())
-		throw std::runtime_error("Нет такого файла");
+		throw std::runtime_error("No such file");
 	fin >> x_size >> y_size;
 	set_size(x_size, y_size);
-	if (x_size * y_size != 0 && fin.eof())
-		throw std::runtime_error("Плохой файл");
+	if (x_size * y_size == 0 || fin.eof())
+		throw std::runtime_error("Bad file");
 	for (int i = 0; i < x_size; i++)
 		for (int j = 0; j < y_size; j++) {
 			char c;
 			fin >> c;
 			if (i != x_size && j != y_size && fin.eof())
-				throw std::runtime_error("Плохой файл");
+				throw std::runtime_error("Bad file");
 			set_main_cell(i, j, c);
 			set_cell(i, j, c);
 		}
+	if (!check())
+		throw std::runtime_error("No way from lair to castle");
 }
 
 void game_objects::Landscape::save(const std::string &filename) const {
 	std::ofstream fout;
 	fout.open(filename, std::ios_base::out | std::ios_base::trunc);
 	if (!fout.is_open())
-		throw std::runtime_error("Невозможно открыть файл");
+		throw std::runtime_error("Can't open file");
 	fout << x_size << ' ' << y_size << std::endl;
 	for (int i = 0; i < x_size; i++) {
 		for (int j = 0; j < y_size; j++)

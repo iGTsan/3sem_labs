@@ -1,17 +1,17 @@
 #include "game_engine_ui.h"
 #include "engine_ui.h"
-//#include "textures.h"
 
 using namespace ui_consts;
 
 void engine_ui::StartMenu::play(const std::string& player_name, const std::string& level) {
+	GE::Game game(player_name);
+	try {
+		game.load_landscape(way_to_levels + level);
+	} catch (std::runtime_error &e) {
+		std::cout << e.what() << std::endl;
+		return;
+	}
 	window.close();
-//	GE::Game game(player_name);
-//	game.load_landscape(level);
-
-	GE::Game game("ya");
-	game.load_landscape("/home/ya/infa/3 sem/lab/4/levels/field2");
-	// "/home/ya/infa/3 sem/lab/4/levels/field2"
 	game.add_enemy(GC::tank_type, {40, 40, 40}, 1);
 	for (int i = 0; i < 15; i++) {
 		game.add_random_enemy();

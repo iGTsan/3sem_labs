@@ -1,3 +1,7 @@
+/** \file
+ * \brief Файл с графической реализацией самой игры
+ */
+
 #ifndef UI_GAME_ENGINE_UI_H_
 #define UI_GAME_ENGINE_UI_H_
 
@@ -10,11 +14,12 @@
 namespace UC = ui_consts;
 
 namespace engine_ui {
+	/// Класс хранящий в себе боковое меню
 	class FieldMenu : public sf_my::MenuPart {
 	public:
 		FieldMenu(int x_shift=0, int x_pos=0, int y_pos=0, int size=0);
 	};
-
+	/// Класс хранящий в себе всю информацию про окно с игрой
 	class GameWindow {
 	private:
 		sf::RenderWindow window;
@@ -45,11 +50,9 @@ namespace engine_ui {
 		void show(GE::Game &game) { window.clear(UC::background_color);
 			show_field(game), show_menu(game), show_units(game), show_stats(game), window.display();}
 		sf::RenderWindow& get_window() {return (window);}
-		void do_event(GE::Game& game, sf::Event& event);
-		bool is_ready();
+		void do_event(GE::Game& game, sf::Event& event); ///< Обработка событий окна
+		bool is_ready(); ///< Сообщает, пора ли делать следующий шаг игры
 	};
 }
-
-
 
 #endif

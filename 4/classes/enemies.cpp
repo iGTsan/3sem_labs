@@ -6,7 +6,7 @@ game_objects::Lair::Lair(int x, int y) : Unit(x, y, GC::lair_symb) {}
 
 void game_objects::Lair::add(const enemy_out &enemy) {
 	if (!enemies.empty() && enemies.back().time > enemy.time)
-		throw std::runtime_error("Нарушение порядка выхода врагов");
+		throw std::runtime_error("Wrong order of enemies");
 	enemies.push_back(enemy);
 }
 
@@ -37,7 +37,7 @@ game_objects::Enemy::Enemy(int x, int y, int type, int shift) :
 		set_symb(GC::aviation_symb);
 		break;
 	default:
-		throw std::runtime_error("Нет такого типа");
+		throw std::runtime_error("No such type");
 	}
 	new_max_health = specialization->max_health;
 	new_speed = specialization->speed;
@@ -153,7 +153,7 @@ void game_objects::Enemy::fire(GE::Game &game) const {
 	specialization->fire(game);
 }
 
-void game_objects::HeroEnemy::aura_bfs(GE::Game &game, int type) {
+void game_objects::HeroEnemy::aura_bfs(GE::Game &game, int type) const {
 	std::deque<std::pair<int, int>> q;
 	std::MyVector<std::MyVector<int>> way(game.get_landscape().get_x_size());
 	for (auto &i: way)
@@ -189,7 +189,7 @@ void game_objects::HeroEnemy::aura_bfs(GE::Game &game, int type) {
 	}
 }
 
-int game_objects::Lair::time_last_enemy() {
+int game_objects::Lair::time_last_enemy() const {
 	if (enemies.empty())
 		return (0);
 	return (enemies.back().time);
@@ -209,7 +209,7 @@ game_objects::HeroEnemy::HeroEnemy(int x, int y, int type, int shift,
 			set_symb(GC::hero_aviation_symb);
 			break;
 		default:
-			throw std::runtime_error("Нет такого типа");
+			throw std::runtime_error("No such type");
 		}
 }
 
@@ -220,13 +220,3 @@ double game_objects::Enemy::get_percent_health() const {
 game_objects::Enemy::~Enemy() {
 	delete specialization;
 }
-/*
- * enemies.cpp
- *
- *  Created on: 5 нояб. 2022 г.
- *      Author: ya
- */
-
-
-
-

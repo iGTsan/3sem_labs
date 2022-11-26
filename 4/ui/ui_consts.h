@@ -1,3 +1,7 @@
+/** \file
+ * \brief Файл со всеми графическими константами
+ */
+
 #ifndef UI_UI_CONSTS_H_
 #define UI_UI_CONSTS_H_
 
@@ -48,6 +52,8 @@ namespace ui_consts {
 	const std::string hero_light_png = way_to_recourses + "hero_light.png";
 	const std::string hero_aviation_png = way_to_recourses + "hero_aviation.png";
 	const std::string wall_png = way_to_recourses + "wall.png";
+
+	const std::string way_to_levels = "/home/ya/infa/3 sem/lab/4/levels/";
 
 	const std::string castle_health = "Castle health: ";
 	const std::string balance = "Balance: ";

@@ -1,10 +1,17 @@
+/** \file
+ *  \brief Мое дополнение к SFML
+ *  Содержит кнопки, тексовые поля
+ *  шаблоны меню и класс, инициализирующий спрайты
+ */
+
 #ifndef UI_UI_H_
 #define UI_UI_H_
 
 #include <SFML/Graphics.hpp>
 
+/// Мое дополнение к SFML
 namespace sf_my {
-
+	/// Класс кнопка
 	class Button {
 	protected:
 		sf::Font font;
@@ -23,17 +30,18 @@ namespace sf_my {
 		void set_text(const std::string& _text);
 		virtual void set_pos(int x, int y);
 		virtual void set_size(int x, int y);
-		int get_x_pos() {return (pos_x);}
-		int get_y_pos() {return (pos_y);}
+		int get_x_pos() const {return (pos_x);}
+		int get_y_pos() const {return (pos_y);}
 		void set_back_color(sf::Color color);
 		void set_outline_color(sf::Color color);
 		virtual int is_clicked(int x, int y);
 		int is_active(int x, int y);
-		virtual void show(sf::RenderWindow &window);
+		virtual void show(sf::RenderWindow &window) const;
 		void resize();
 		virtual ~Button() {};
 	};
 
+	/// Класс кноака-флаг
 	class CheckButton : public Button {
 	protected:
 		int checked = 0;
@@ -46,13 +54,14 @@ namespace sf_my {
 		void set_pos(int x, int y) override;
 		void set_size(int x, int y) override;
 		void set_desc(const std::string& desc);
-		void show(sf::RenderWindow& window) override;
-		int is_checked() {return (checked);}
+		void show(sf::RenderWindow& window) const override;
+		int is_checked() const {return (checked);}
 		int is_clicked(int x, int y) override;
 		void set_inactive() {checked = 0;}
 		void set_active() {checked = 1;}
-};
+	};
 
+	/// Класс-коллекция кнопок-флагов
 	class CheckButtons {
 	protected:
 		std::vector<CheckButton *> buttons;
@@ -66,13 +75,14 @@ namespace sf_my {
 		void set_pos(int x, int y);
 		void set_size(int x, int y);
 		void add_button(int return_code=1, const std::string& desc="");
-		void show(sf::RenderWindow& window);
+		void show(sf::RenderWindow& window) const;
 		Button& operator[](int i) {return (*buttons[i]);}
 		void is_active(int x, int y);
 		virtual int is_clicked(int x, int y);
 		virtual ~CheckButtons();
 	};
 
+	/// Класс-коллекция кнопок-переключателей
 	class RadioButtons : public CheckButtons {
 	private:
 		int checked_button;
@@ -82,6 +92,7 @@ namespace sf_my {
 		int is_clicked(int x, int y) override;
 	};
 
+	/// Класс-шаблон для меню
 	class MenuPart {
 	private:
 		sf::RectangleShape chosen;
@@ -96,14 +107,15 @@ namespace sf_my {
 		void set_pos(int x, int y);
 		void set_shift(int x);
 		void set_size(int _size);
-		int get_x_pos() {return (x_pos);}
-		int get_y_pos() {return (y_pos);}
-		void show(sf::RenderWindow &window);
+		int get_x_pos() const {return (x_pos);}
+		int get_y_pos() const {return (y_pos);}
+		void show(sf::RenderWindow &window) const;
 		int is_clicked(int x, int y);
 		int is_active(int x, int y);
 		~MenuPart();
 	};
 
+	/// Класс инициализирующий спрайт
 	class Sprite {
 	private:
 		sf::Texture texture;
@@ -113,15 +125,16 @@ namespace sf_my {
 		sf::Sprite& get_sprite() {return (sprite);}
 	};
 
+	/// Класс текстовое поле
 	class TextField : public Button {
 	private:
 		int clicked = 0;
 	public:
 		TextField(int x_pos=0, int y_pos=0, int x_size=0, int y_size=0);
-		std::string get_text();
+		std::string get_text() const;
 		int is_clicked(int x, int y) override;
 		void button_pressed(sf::Keyboard::Key &key);
 	};
 }
 
-#endif /* UI_UI_H_ */
+#endif

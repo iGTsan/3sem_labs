@@ -1,8 +1,5 @@
-/*
- * map_engine.h
- *
- *  Created on: 30 окт. 2022 г.
- *      Author: ya
+/** \file
+ * \brief Файл с редактором уровней
  */
 
 #ifndef ENGINE_EDITOR_ENGINE_H_
@@ -12,4 +9,4 @@
 
 
 
-#endif /* ENGINE_EDITOR_ENGINE_H_ */
+#endif
