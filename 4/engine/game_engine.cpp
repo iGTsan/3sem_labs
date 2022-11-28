@@ -112,12 +112,13 @@ void Game::add_tower(int x, int y) {
 		throw std::runtime_error("Wrong cords");
 	if (towers_field[x][y] != nullptr)
 		throw std::runtime_error("Place isn't empty");
+	if (field.get_cell(x, y) != GC::plain_symb &&
+			field.get_cell(x, y) != GC::wall_symb)
+		throw std::runtime_error("Bad place");
 	balance -= GC::tower_chars_table[0].cost;
 	Tower* new_tower = new Tower(x, y);
 	units_queue.push_front(new_tower);
 	towers_field[x][y] = (new_tower);
-//	field.set_cell(x, y, GC::tower_symb);
-//	field.set_main_cell(x, y, GC::tower_symb);
 }
 
 void Game::add_wall(int x, int y) {
@@ -126,10 +127,13 @@ void Game::add_wall(int x, int y) {
 	if (x < 0 || x >= field.get_x_size() ||
 			y < 0 || y >= field.get_y_size())
 		throw std::runtime_error("Wrong cords");
+	if (field.get_cell(x, y) != GC::plain_symb &&
+			field.get_cell(x, y) != GC::tower_symb)
+		throw std::runtime_error("Bad place");
 	auto it = units_field[x][y].begin();
 	while (it != units_field[x][y].end()) {
 		if ((static_cast<GO::Unit*>((*it)))->get_symb() == GC::wall_symb)
-			throw std::runtime_error("place isn't empty");
+			throw std::runtime_error("Place isn't empty");
 		it++;
 	}
 	balance -= GC::wall_cost;
@@ -139,7 +143,10 @@ void Game::add_wall(int x, int y) {
 }
 
 void Game::tower_level_up(int x, int y) {
-	towers_field[x][y]->level_up(*this);
+	if (towers_field[x][y])
+		towers_field[x][y]->level_up(*this);
+	else
+		throw std::runtime_error("There is no tower");
 }
 
 void Game::castle_level_up() {
