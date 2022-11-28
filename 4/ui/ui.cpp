@@ -69,7 +69,8 @@ int sf_my::Button::is_active(int x, int y) {
 
 void sf_my::Button::show(sf::RenderWindow &window) const {
 	window.draw(sprite);
-	window.draw(text);
+	if (text.getString() != "")
+		window.draw(text);
 }
 
 sf_my::MenuPart::MenuPart(int x_shift, int x_pos, int y_pos, int size) :
@@ -318,5 +319,63 @@ void sf_my::TextField::button_pressed(sf::Keyboard::Key &key) {
 		text.setString(t);
 	}
 
+}
+
+sf_my::ButtonMatrix::ButtonMatrix(int x_size, int y_size) {
+	buttons.resize(y_size);
+	for (int i = 0; i < y_size; i++) {
+		buttons[i].resize(x_size);
+		for (int j = 0; j < x_size; j++) {
+			buttons[i][j].set_size(cell_size, cell_size);
+			buttons[i][j].set_pos(i * cell_size, j * cell_size);
+			buttons[i][j].set_back_color(sf::Color::Transparent);
+			buttons[i][j].set_outline_color(sf::Color::Transparent);
+		}
+	}
+}
+
+void sf_my::ButtonMatrix::set_size(int x_size, int y_size) {
+	buttons.resize(x_size);
+	for (int i = 0; i < x_size; i++) {
+		buttons[i].resize(y_size);
+		for (int j = 0; j < y_size; j++) {
+			buttons[i][j].set_size(cell_size, cell_size);
+			buttons[i][j].set_pos(i * cell_size, j * cell_size);
+			buttons[i][j].set_back_color(sf::Color::Transparent);
+			buttons[i][j].set_outline_color(sf::Color::Transparent);
+		}
+	}
+}
+
+void sf_my::ButtonMatrix::show(sf::RenderWindow &window) const {
+	for (auto row: buttons)
+		for (auto button: row)
+			button.show(window);
+}
+
+int sf_my::ButtonMatrix::is_clicked(int x, int y) {
+	int i;
+	int j;
+	return (is_clicked(x, y, i, j));
+}
+
+int sf_my::ButtonMatrix::is_clicked(int x, int y, int &i, int &j) {
+	int res = 0;
+	for (i = 0; i < static_cast<int>(buttons.size()); i++)
+		for (j = 0; j < static_cast<int>(buttons[i].size()); j++)
+			if ((res = buttons[i][j].is_clicked(x, y))) {
+				return (res);
+			}
+	return (0);
+}
+
+int sf_my::ButtonMatrix::is_active(int x, int y) {
+	int res = 0;
+	for (int i = 0; i < static_cast<int>(buttons.size()); i++)
+		for (int j = 0; j < static_cast<int>(buttons[i].size()); j++)
+			if (buttons[i][j].is_active(x, y)) {
+				res = buttons[i][j].is_active(x, y);
+			}
+	return (res);
 }
 /// саша я тебя люблю

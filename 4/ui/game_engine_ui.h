@@ -31,7 +31,8 @@ namespace engine_ui {
 		FieldMenu field_menu;
 		textures::Sprites sprites;
 		textures::Fonts fonts;
-		std::vector<std::vector<sf_my::Button>> button_field;
+//		std::MyVector<std::MyVector<sf_my::Button>> button_field;
+		sf_my::ButtonMatrix button_field;
 		int counter;
 		int size_x;
 		int size_y;

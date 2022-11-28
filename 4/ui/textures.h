@@ -7,6 +7,7 @@
 
 namespace UC = ui_consts;
 
+/// Текстуры, используеме в игре
 namespace textures {
 	class Fonts {
 	public:

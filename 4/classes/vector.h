@@ -199,6 +199,9 @@ std::MyVector<T>::MyVector(MyVector<T> &&other) {
 	data = other.data;
 	len = other.len;
 	max_len = other.max_len;
+	other.data = nullptr;
+	other.len = 0;
+	other.max_len = 0;
 }
 
 template<class T>
@@ -207,6 +210,9 @@ std::MyVector<T>& std::MyVector<T>::operator =(MyVector<T> &&other) {
 	data = other.data;
 	len = other.len;
 	max_len = other.max_len;
+	other.data = nullptr;
+	other.len = 0;
+	other.max_len = 0;
 	return (*this);
 }
 

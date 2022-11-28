@@ -56,6 +56,7 @@ namespace game_consts {
 	constexpr int tank_type = 2;
 	constexpr int aviation_type = 3;
 	constexpr int just_way_type = 4;
+	constexpr int no_enemy_way_type = 5;
 
 	constexpr int tower_max_level = 5;
 	constexpr int castle_max_level = 5;

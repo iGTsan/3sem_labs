@@ -48,10 +48,18 @@ void game_objects::Tank::move(GE::Game& game) {
 	int x;
 	int y;
 	if (bfs(game.get_landscape(), get_x_cord(), get_y_cord(),
-			2, GC::light_type, GC::castle_symb,x, y, -1))
+			2, GC::light_type, GC::castle_symb,x, y, -1) &&
+			!is_enemy(game.get_landscape().get_cell(x, y)))
 		set_cords(x, y);
 	else if (bfs(game.get_landscape(), get_x_cord(), get_y_cord(),
 			2, GC::tank_type, GC::castle_symb,x, y, -1) &&
+			game.get_landscape().get_cell(x, y) != GC::wall_symb &&
+			!is_enemy(game.get_landscape().get_cell(x, y)))
+		set_cords(x, y);
+	else if (bfs(game.get_landscape(), get_x_cord(), get_y_cord(),
+			2, GC::no_enemy_way_type, GC::castle_symb,x, y, -1) &&
+			game.get_landscape().get_cell(x, y) != GC::mountain_symb &&
+			game.get_landscape().get_cell(x, y) != GC::river_symb &&
 			game.get_landscape().get_cell(x, y) != GC::wall_symb)
 		set_cords(x, y);
 }
@@ -75,7 +83,14 @@ void game_objects::Light::move(GE::Game& game) {
 	int x;
 	int y;
 	if (bfs(game.get_landscape(), get_x_cord(), get_y_cord(),
-			2, GC::light_type, GC::castle_symb, x, y, -1))
+			2, GC::light_type, GC::castle_symb, x, y, -1) &&
+			!is_enemy(game.get_landscape().get_cell(x, y)))
+		set_cords(x, y);
+	else if (bfs(game.get_landscape(), get_x_cord(), get_y_cord(),
+			2, GC::no_enemy_way_type, GC::castle_symb,x, y, -1) &&
+			game.get_landscape().get_cell(x, y) != GC::mountain_symb &&
+			game.get_landscape().get_cell(x, y) != GC::river_symb &&
+			game.get_landscape().get_cell(x, y) != GC::wall_symb)
 		set_cords(x, y);
 }
 
@@ -96,7 +111,12 @@ void game_objects::Aviation::move(GE::Game& game) {
 	int x;
 	int y;
 	if (bfs(game.get_landscape(), get_x_cord(), get_y_cord(),
-			2, GC::aviation_type, GC::castle_symb, x, y, -1))
+			2, GC::aviation_type, GC::castle_symb, x, y, -1) &&
+			!is_enemy(game.get_landscape().get_cell(x, y)))
+		set_cords(x, y);
+	else if (bfs(game.get_landscape(), get_x_cord(), get_y_cord(),
+			2, GC::no_enemy_way_type, GC::castle_symb,x, y, -1) &&
+			game.get_landscape().get_cell(x, y) != GC::mountain_symb)
 		set_cords(x, y);
 }
 

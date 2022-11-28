@@ -8,6 +8,7 @@
 #define UI_UI_H_
 
 #include <SFML/Graphics.hpp>
+#include "../classes/vector.h"
 
 /// Мое дополнение к SFML
 namespace sf_my {
@@ -30,6 +31,7 @@ namespace sf_my {
 		void set_text(const std::string& _text);
 		virtual void set_pos(int x, int y);
 		virtual void set_size(int x, int y);
+		void set_return_code(int code) {return_code = code;}
 		int get_x_pos() const {return (pos_x);}
 		int get_y_pos() const {return (pos_y);}
 		void set_back_color(sf::Color color);
@@ -41,7 +43,7 @@ namespace sf_my {
 		virtual ~Button() {};
 	};
 
-	/// Класс кноака-флаг
+	/// Класс кнопка-флаг
 	class CheckButton : public Button {
 	protected:
 		int checked = 0;
@@ -134,6 +136,17 @@ namespace sf_my {
 		std::string get_text() const;
 		int is_clicked(int x, int y) override;
 		void button_pressed(sf::Keyboard::Key &key);
+	};
+
+	class ButtonMatrix {
+		std::MyVector<std::MyVector<Button>> buttons;
+	public:
+		ButtonMatrix(int x_size = 0, int y_size = 0);
+		void set_size(int x_size, int y_size);
+		void show(sf::RenderWindow& window) const;
+		int is_clicked(int x, int y);
+		int is_clicked(int x, int y, int& i, int& j);
+		int is_active(int x, int y);
 	};
 }
 

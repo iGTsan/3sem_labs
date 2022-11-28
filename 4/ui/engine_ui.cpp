@@ -1,4 +1,5 @@
 #include "game_engine_ui.h"
+#include "editor_engine_ui.h"
 #include "engine_ui.h"
 
 using namespace ui_consts;
@@ -33,6 +34,12 @@ void engine_ui::StartMenu::play(const std::string& player_name, const std::strin
 		}
 
 	}
+}
+
+void engine_ui::StartMenu::editor(const std::string &level) {
+	EditorWindow editor(level);
+	window.close();
+	editor.loop();
 }
 
 engine_ui::StartMenu::StartMenu() {
@@ -169,6 +176,8 @@ void engine_ui::StartMenu::mouse_pressed(sf::Event &event) {
 		break;
 	case 2:
 		level.is_clicked(x, y);
+		if (next.is_clicked(x, y))
+			editor(level.get_text());
 		break;
 	}
 }

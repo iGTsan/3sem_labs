@@ -30,8 +30,8 @@ void engine_ui::GameWindow::show_field(GE::Game &game) {
 				window.draw(sprites.lair_sprite.get_sprite());
 				break;
 			}
-			button_field[i][j].show(window);
 		}
+	button_field.show(window);
 }
 
 void engine_ui::GameWindow::show_units(GE::Game &game) {
@@ -126,16 +126,8 @@ engine_ui::GameWindow::GameWindow(GE::Game &game) :
 	field_menu.set_shift(game.get_landscape().get_x_size() * cell_size + 2);
 	field_menu.set_size(menu_size);
 
-	button_field.resize(game.get_landscape().get_x_size());
-	for (int i = 0; i < static_cast<int>(button_field.size()); i++) {
-		button_field[i].resize(game.get_landscape().get_y_size());
-		for (int j = 0; j < static_cast<int>(button_field[i].size()); j++) {
-			button_field[i][j].set_size(cell_size, cell_size);
-			button_field[i][j].set_pos(i * cell_size, j * cell_size);
-			button_field[i][j].set_back_color(sf::Color::Transparent);
-			button_field[i][j].set_outline_color(sf::Color::Transparent);
-		}
-	}
+	button_field.set_size(game.get_landscape().get_x_size(),
+			game.get_landscape().get_y_size());
 
 	speed.add_button(button_speed1, "Speed 1");
 	speed.add_button(button_speed2, "Speed 2");
@@ -174,12 +166,12 @@ void engine_ui::GameWindow::do_event(GE::Game &game, sf::Event &event) {
 void engine_ui::GameWindow::mouse_pressed(GE::Game &game, sf::Event& event) {
 	int x = event.mouseButton.x * old_size_x / size_x;
 	int y = event.mouseButton.y * old_size_y / size_y;
-	for (int i = 0; i < static_cast<int>(button_field.size()); i++)
-		for (int j = 0; j < static_cast<int>(button_field[i].size()); j++)
-			if (button_field[i][j].is_clicked(x, y)) {
-				menu = &field_menu;
-				menu->set_pos(i, j);
-			}
+	int i;
+	int j;
+	if (button_field.is_clicked(x, y, i, j)) {
+		menu = &field_menu;
+		menu->set_pos(i, j);
+	}
 	if (menu)
 		try {
 		switch (menu->is_clicked(x, y)) {
@@ -217,9 +209,9 @@ void engine_ui::GameWindow::mouse_pressed(GE::Game &game, sf::Event& event) {
 void engine_ui::GameWindow::mouse_moved(GE::Game &game, sf::Event &event) {
 	int x = event.mouseMove.x * old_size_x / size_x;
 	int y = event.mouseMove.y * old_size_y / size_y;
-	for (int i = 0; i < static_cast<int>(button_field.size()); i++)
-		for (int j = 0; j < static_cast<int>(button_field[i].size()); j++)
-			button_field[i][j].is_active(x, y);
+//	for (int i = 0; i < static_cast<int>(button_field.size()); i++)
+//		for (int j = 0; j < static_cast<int>(button_field[i].size()); j++)
+	button_field.is_active(x, y);
 	if (menu)
 		menu->is_active(x, y);
 	speed.is_active(x, y);

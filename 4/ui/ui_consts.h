@@ -26,6 +26,12 @@ namespace ui_consts {
 	constexpr int button_level_editor = 2;
 	constexpr int button_exit = 3;
 
+	constexpr int button_plain = 1;
+	constexpr int button_mountain = 2;
+	constexpr int button_river = 3;
+	constexpr int button_lair = 4;
+	constexpr int button_castle = 5;
+
 	constexpr int button_speed1 = 1;
 	constexpr int button_speed2 = 2;
 	constexpr int button_speed3 = 3;

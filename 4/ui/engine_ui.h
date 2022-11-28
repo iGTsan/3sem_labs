@@ -22,6 +22,7 @@ namespace engine_ui {
 		int old_size_y;
 		int state = 0;
 		void play(const std::string& player_name, const std::string& level);
+		void editor(const std::string& level);
 		void show();
 		void do_event(sf::Event& event);
 		void mouse_moved(sf::Event& event);

@@ -13,7 +13,7 @@ namespace GC = game_consts;
 
 namespace game_objects {
 
-	//// Класс защитная стена
+	/// Класс защитная стена
 	class Wall : public Unit {
 	private:
 		static const int max_health = GC::wall_max_health;

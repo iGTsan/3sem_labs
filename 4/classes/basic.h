@@ -93,6 +93,7 @@ namespace game_objects {
 	 */
 	bool bfs(const Landscape& land, int x_from, int y_from,
 			int type, int way_type, char to_find, int &x, int &y, int radius = -1);
+	bool is_enemy(char symb);
 }
 
 #endif

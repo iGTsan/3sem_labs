@@ -31,7 +31,7 @@ namespace game_objects {
 		const int repair_speed;
 	} castle_chars;
 
-	// Геройская аура
+	/// Геройская аура
 	/**
 	 * Используется для облегчения работы с полем аур.
 	 */

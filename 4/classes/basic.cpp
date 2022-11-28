@@ -48,9 +48,19 @@ void game_objects::Landscape::set_main_cell(int x, int y, char symb) {
 }
 
 bool game_objects::Landscape::check() const {
-	int x;
-	int y;
-	if (!game_objects::bfs(*this, 0, 0, 1, GC::just_way_type, GC::castle_symb, x, y, -1))
+	int x = -1;
+	int y = -1;
+	for (int i = 0; i < static_cast<int>(field.size()); i++)
+		for (int j = 0; j < static_cast<int>(field[i].size()); j++)
+			if (field[i][j] == GC::castle_symb) {
+				if (x != -1)
+					return (0);
+				x = i;
+				y = j;
+			}
+//	if (!game_objects::bfs(*this, 0, 0, 1, GC::just_way_type, GC::castle_symb, x, y, -1))
+//		return (0);
+	if (x == -1)
 		return (0);
 	if (!game_objects::bfs(*this, x, y, 1, GC::light_type, GC::lair_symb, x, y, -1))
 		return (0);
@@ -153,12 +163,17 @@ bool check_cell(int way_type, char symb) {
 			return (0);
 		else
 			return (1);
+	else if (way_type == GC::no_enemy_way_type)
+		if (game_objects::is_enemy(symb))
+			return (0);
+		else
+			return (1);
 	else if (way_type == GC::just_way_type)
 		return (1);
 	return (1);
 }
 
-bool is_enemy(char symb) {
+bool game_objects::is_enemy(char symb) {
 	return (symb == GC::tank_symb || symb == GC::hero_tank_symb ||
 			symb == GC::light_symb || symb == GC::hero_light_symb ||
 			symb == GC::aviation_symb || symb == GC::hero_aviation_symb);
