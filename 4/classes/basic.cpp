@@ -7,8 +7,10 @@ using std::get;
 
 game_objects::Landscape::Landscape(int _x_size, int _y_size,
 		const std::MyVector<std::string> *_field) : x_size(0), y_size(0) {
-	if (_field == nullptr)
+	if (_field == nullptr) {
+		set_size(_x_size, _y_size);
 		return;
+	}
 	if (static_cast<int>(_field->size()) != _x_size)
 		throw std::length_error("Wrong X size");
 	for (auto s: *_field) {

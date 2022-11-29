@@ -34,7 +34,7 @@ void game_objects::Tower::level_up(Game& game) {
 }
 
 game_objects::Castle::Castle(int x, int y, const std::string& _name, int _level) :
-		Wall(x, y), Tower(x, y, _level) {
+		Wall(x, y), Tower(x, y, _level), name(_name) {
 	health = chars_table[level].max_health;
 }
 
@@ -56,4 +56,8 @@ void game_objects::Castle::level_up(GE::Game& game) {
 
 double game_objects::Wall::get_percent_health() const {
 	return (static_cast<double>(health) / max_health);
+}
+
+double game_objects::Castle::get_percent_health() const {
+	return (static_cast<double>(health) / chars_table[level].max_health);
 }

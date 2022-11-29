@@ -55,14 +55,16 @@ namespace game_objects {
 		std::string name;
 		constexpr static const castle_chars *chars_table = GC::castle_chars_table;
 	public:
-		Castle() : Wall(0, 0), Tower(0, 0) {};
 		Castle(int x, int y, const std::string& _name, int _level=0);
 		int get_health() {return (health);}
 		void Action(GE::Game&) override; ///< Регенерация и генерация монет
 		void get_damage(int damage) override {Wall::get_damage(damage);};
 		bool is_alive() const override {return (Wall::is_alive());}
+		int get_x_cord() const {return (Wall::get_x_cord());}
+		int get_y_cord() const {return (Wall::get_y_cord());}
 		void level_up(GE::Game&) override;
-		double get_percent_health() const override {return (Wall::get_percent_health());}
+		double get_percent_health() const override;
+		const std::string& get_name() const {return (name);}
 	};
 }
 
