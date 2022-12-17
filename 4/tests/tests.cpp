@@ -149,7 +149,12 @@ TEST (Castle, Funcs) {
 }
 
 TEST (Castle, LevelUp) {
-
+	GE::Game game(name);
+	game.load_landscape(pwd + testfield);
+	ASSERT_THROW(game.castle_level_up(), std::runtime_error);
+	game.balance = GC::castle_chars_table[1].cost;
+	ASSERT_NO_THROW(game.castle_level_up());
+	ASSERT_LT(game.get_castle().get_percent_health(), 1);
 }
 
 TEST (Tower, InitConstructor) {
@@ -174,11 +179,29 @@ TEST (Tower, InitConstructor) {
 
 
 TEST (Tower, Fire) {
-
+	GE::Game game(name);
+	game.load_landscape(pwd + testfield);
+	game.balance = GC::tower_chars_table[0].cost;
+	game.add_tower(lair_x, lair_y + 1);
+	auto enemy = game.add_to_queue(GC::light_type);
+	double health = enemy->get_percent_health();
+	while (game.counter % GC::tower_chars_table[0].recoil)
+		game.tic();
+	game.tic();
+	ASSERT_LT(enemy->get_percent_health(), health);
 }
 
 TEST (Tower, LevelUp) {
-
+	GE::Game game(name);
+	game.load_landscape(pwd + testfield);
+	game.balance = GC::tower_chars_table[0].cost;
+	game.add_tower(lair_x, lair_y + 1);
+	ASSERT_THROW(game.tower_level_up(lair_x, lair_y + 1), std::runtime_error);
+	for (int i = 1; i < GC::tower_max_level; i++) {
+		game.balance = GC::tower_chars_table[i].cost;
+		ASSERT_NO_THROW(game.tower_level_up(lair_x, lair_y + 1));
+	}
+	ASSERT_THROW(game.tower_level_up(lair_x, lair_y + 1), std::runtime_error);
 }
 
 TEST (Wall, InitConstructor) {
@@ -206,6 +229,17 @@ TEST (Wall, Funcs) {
 }
 
 TEST (Wall, Repair) {
+	GE::Game game(name);
+	game.load_landscape(pwd + testfield);
+	game.balance = GC::wall_cost;
+	auto wall = game.add_wall(lair_x, lair_y + 1);
+	game.add_to_queue(GC::tank_type);
+	game.tic();
+	double health = wall->get_percent_health();
+	game.balance = GC::wall_cost;
+	ASSERT_THROW(game.repair_wall(lair_x, lair_y), std::runtime_error);
+	game.repair_wall(lair_x, lair_y + 1);
+	ASSERT_LT(health, wall->get_percent_health());
 
 }
 
@@ -328,8 +362,42 @@ TEST (Enemy, Move) {
 	}
 }
 
-TEST (Enemy, Fire) {
+TEST (Enemy, LightAndAviationFire) {
+	GE::Game game(name);
+	game.load_landscape(pwd + testfield);
+	game.balance = GC::wall_cost;
+	auto wall = game.add_wall(lair_x, lair_y + 1);
+	game.add_to_queue(GC::light_type);
+	game.add_to_queue(GC::aviation_type);
+	for (int i = 0;
+			i < std::max(GC::light_speed, GC::aviation_speed) *
+					game.get_landscape().get_x_size() *
+					game.get_landscape().get_y_size(); i++)
+		game.tic();
+	int health = game.get_castle().get_health();
+	for (int i = 0;
+				i < std::max(GC::light_recoil, GC::aviation_recoil); i++)
+			game.tic();
+	ASSERT_LT(game.get_castle().get_health(), health);
+	ASSERT_EQ(wall->get_percent_health(), 1);
+}
 
+TEST (Enemy, TankFire) {
+	GE::Game game(name);
+	game.load_landscape(pwd + testfield);
+	game.balance = GC::wall_cost;
+	auto wall = game.add_wall(lair_x, lair_y + 1);
+	game.add_to_queue(GC::tank_type);
+	game.tic();
+	ASSERT_LT(wall->get_percent_health(), 1);
+	for (int i = 0; i < GC::tank_speed *
+					game.get_landscape().get_x_size() *
+					game.get_landscape().get_y_size(); i++)
+		game.tic();
+	int health = game.get_castle().get_health();
+	for (int i = 0; i < GC::tank_recoil; i++)
+			game.tic();
+	ASSERT_LT(game.get_castle().get_health(), health);
 }
 
 TEST (HeroEnemy, InitConstructor) {
@@ -372,7 +440,7 @@ TEST (Hero, Aura) {
 	ASSERT_LT(enemy->get_percent_health(), 1);
 }
 
-TEST (Vector, InitConstructor) {
+TEST (Vector, Constructors) {
 	ASSERT_NO_THROW(std::MyVector<int> vector);
 	std::MyVector<int> vector;
 	ASSERT_EQ(vector.size(), 0);

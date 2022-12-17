@@ -42,7 +42,7 @@ namespace game_consts {
 	constexpr char river_symb = 'R';
 	constexpr char wall_symb = 'W';
 	constexpr char castle_symb = 'C';
-	constexpr char lair_symb = 'L';
+	constexpr char lair_symb = 'e';
 	constexpr char enemy_symb = 'E';
 	constexpr char tank_symb = 't';
 	constexpr char light_symb = 'l';
