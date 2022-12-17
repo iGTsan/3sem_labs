@@ -35,18 +35,16 @@ namespace game_engine {
 		int counter = 0;
 		int balance = 0;
 		Game(const std::string& _player_name) : player_name(_player_name) {std::srand(std::clock());}
-		void change_landscape(int land_x_size, int land_y_size,
-				const std::MyVector<std::string>* _field = nullptr);
 		void load_landscape(const std::string& filename);
 		void save_landscape(const std::string& filename) const;
 		void move_unit(int x_from, int y_from, int x_to, int y_to, GO::Unit* unit);
 		void add_enemy(int type, int time); ///< Добавить обычного врага в очередь логова
 		void add_enemy(int type, const GO::aura &a, int time); ///< Добавить героя в очередь логова
 		void add_random_enemy(); ///< Добавить случайного врага в очередь логова
-		void add_tower(int x, int y); ///< Попробовать добавить башню на поле
-		void add_wall(int x, int y); ///< Поробовать добавить стену на поле
-		void add_to_queue(int type); ///< Выпустить нового обычного врага из логова
-		void add_to_queue(int type, const GO::aura &a); ///< Выпустить нового героя из логова
+		GO::Unit* add_tower(int x, int y); ///< Попробовать добавить башню на поле
+		GO::Unit* add_wall(int x, int y); ///< Поробовать добавить стену на поле
+		GO::Unit* add_to_queue(int type); ///< Выпустить нового обычного врага из логова
+		GO::Unit* add_to_queue(int type, const GO::aura &a); ///< Выпустить нового героя из логова
 		void tower_level_up(int x, int y);
 		void castle_level_up();
 		void repair_wall(int x, int y);

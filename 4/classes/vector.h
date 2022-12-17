@@ -6,6 +6,7 @@
 #define CLASSES_VECTOR_H_
 
 #include <cstddef>
+#include <algorithm>
 
 namespace std {
 	template <typename T>
@@ -93,7 +94,7 @@ std::MyVector<T>::MyVector(int n, const T &value) {
 	len = n;
 	max_len = n;
 	data = new T[n];
-	for (auto elem: *this)
+	for (auto& elem: *this)
 		elem = value;
 }
 

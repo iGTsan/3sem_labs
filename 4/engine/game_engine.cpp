@@ -3,15 +3,6 @@
 using namespace game_objects;
 using namespace game_engine;
 
-void Game::change_landscape(int land_x_size, int land_y_size,
-		const std::MyVector<std::string> *_field) {
-	Landscape new_field(land_x_size, land_y_size, _field);
-	if (!new_field.check())
-		throw std::runtime_error("Отсутствует логово, замок или путь от логова до замка");
-	field = new_field;
-	set_cords();
-}
-
 void Game::add_enemy(int type, int time) {
 	lair->add(enemy_out(time, type));
 }
@@ -67,33 +58,30 @@ int Game::is_end() const {
 	return (0);
 }
 
-void Game::add_to_queue(int type) {
+GO::Unit* Game::add_to_queue(int type) {
 	int x = lair->get_x_cord();
 	int y = lair->get_y_cord();
 	Unit * new_unit = new Enemy(x, y, type, counter);
 	units_queue.push_front(new_unit);
 	units_field[x][y].push_back(new_unit);
+	return (new_unit);
 }
 
 void Game::add_enemy(int type, const aura &a, int time) {
 	lair->add(enemy_out(time, type, a));
 }
 
-void Game::add_to_queue(int type, const aura &a) {
+GO::Unit* Game::add_to_queue(int type, const aura &a) {
 	int x = lair->get_x_cord();
 	int y = lair->get_y_cord();
 	Unit * new_unit = new HeroEnemy(x, y, type, counter, a);
 	units_queue.push_front(new_unit);
 	units_field[x][y].push_back(new_unit);
+	return (new_unit);
 }
 
 void Game::get_damage(int x, int y, int damage) {
 	auto it = units_field[x][y].begin();
-
-//	while (it != units_field[x][y].end() &&
-//			(static_cast<Unit*>(*it))->get_symb() != GC::wall_symb &&
-//			(static_cast<Unit*>(*it))->get_symb() != GC::enemy_symb)
-//		it++;
 	if (it == units_field[x][y].end())
 		return;
 	(static_cast<Unit*>(*it))->get_damage(damage);
@@ -104,7 +92,7 @@ void Game::get_damage(int x, int y, int damage) {
 	}
 }
 
-void Game::add_tower(int x, int y) {
+GO::Unit* Game::add_tower(int x, int y) {
 	if (balance < GC::tower_chars_table[0].cost)
 		throw std::runtime_error("Low money");
 	if (x < 0 || x >= field.get_x_size() ||
@@ -119,9 +107,10 @@ void Game::add_tower(int x, int y) {
 	Tower* new_tower = new Tower(x, y);
 	units_queue.push_front(new_tower);
 	towers_field[x][y] = (new_tower);
+	return (new_tower);
 }
 
-void Game::add_wall(int x, int y) {
+GO::Unit* Game::add_wall(int x, int y) {
 	if (balance < GC::wall_cost)
 		throw std::runtime_error("Low money");
 	if (x < 0 || x >= field.get_x_size() ||
@@ -140,6 +129,7 @@ void Game::add_wall(int x, int y) {
 	Unit* new_wall = new Wall(x, y);
 	units_field[x][y].push_back(new_wall);
 	field.set_cell(x, y, GC::wall_symb);
+	return (new_wall);
 }
 
 void Game::tower_level_up(int x, int y) {

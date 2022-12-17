@@ -21,7 +21,8 @@ void game_objects::Tower::fire(Game& game) const {
 
 game_objects::Tower::Tower(int x, int y, int _level) :
 		Unit(x, y, GC::tower_symb), level(_level) {
-
+	if (level < 0 || level > GC::tower_max_level)
+		throw std::runtime_error("Bad level");
 }
 
 void game_objects::Tower::level_up(Game& game) {
@@ -36,6 +37,8 @@ void game_objects::Tower::level_up(Game& game) {
 game_objects::Castle::Castle(int x, int y, const std::string& _name, int _level) :
 		Wall(x, y), Tower(x, y, _level), name(_name) {
 	health = chars_table[level].max_health;
+	if (level < 0 || level > GC::castle_max_level)
+		throw std::runtime_error("Bad level");
 }
 
 void game_objects::Castle::Action(Game& game) {

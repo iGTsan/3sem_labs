@@ -23,6 +23,10 @@ game_objects::Landscape::Landscape(int _x_size, int _y_size,
 }
 
 void game_objects::Landscape::set_size(int _x_size, int _y_size) {
+	if (_x_size < 0)
+		throw std::runtime_error("Bad x size");
+	if (_y_size < 0)
+		throw std::runtime_error("Bad y size");
 	field.resize(_x_size);
 	for (std::string &c: field)
 		c.resize(_y_size, GC::def_symb);
